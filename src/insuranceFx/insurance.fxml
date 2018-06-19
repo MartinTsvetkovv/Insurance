@@ -1,0 +1,104 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.ComboBox?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.layout.Border?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<GridPane fx:controller="insuranceFx.ControllerFx"
+          xmlns:fx="http://javafx.com/fxml" alignment="TOP_CENTER" hgap="15" vgap="15" >
+    <padding>
+        <Insets top="50"/>
+    </padding>
+    <Label   GridPane.rowIndex="0" GridPane.columnIndex="0" text="Вид МПС:" textFill="black">
+        <font>
+            <Font name="Arial bold" size="14"/>
+        </font>
+    </Label>
+    <ComboBox fx:id="vehicleComboBox" GridPane.rowIndex="0" GridPane.columnIndex="1" onAction="#handleComboBoxAction">
+        <value>
+            <String fx:value="-- изберете --"/>
+        </value>
+    </ComboBox>
+    <Label fx:id="label" text="Кубатура:" GridPane.rowIndex="1" GridPane.columnIndex="0" textFill="black">
+        <font>
+            <Font name="Arial bold" size="14"/>
+        </font>
+    </Label>
+    <ComboBox fx:id="volumeComboBox" GridPane.rowIndex="1" GridPane.columnIndex="1"  >
+        <value>
+            <String fx:value="-- изберете --"/>
+        </value>
+    </ComboBox>
+    <Label fx:id="insTermLable" text="Срок на застраховката:" GridPane.rowIndex="2" GridPane.columnIndex="0" textFill="black">
+        <font>
+            <Font name="Arial bold" size="14"/>
+        </font>
+    </Label>
+    <ComboBox fx:id="insuranceTermComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1">
+        <value>
+            <String fx:value="~~ изберете ~~"/>
+        </value>
+    </ComboBox>
+    <Label text="Година на производство:" GridPane.rowIndex="4" GridPane.columnIndex="0" textFill="black">
+        <font>
+            <Font name="Arial bold" size="14"/>
+        </font>
+    </Label>
+    <ComboBox fx:id="carYearComboBox" GridPane.rowIndex="4" GridPane.columnIndex="1">
+        <value>
+            <String fx:value="-- изберете --"/>
+        </value>
+    </ComboBox>
+    <Label text="Възраст на водача:" GridPane.rowIndex="6" GridPane.columnIndex="0" textFill="black">
+        <font>
+            <Font name="Arial bold" size="14"/>
+        </font>
+    </Label>
+    <ComboBox fx:id="userYearsComboBox" GridPane.rowIndex="6" GridPane.columnIndex="1">
+        <value>
+            <String fx:value="-- изберете --"/>
+        </value>
+    </ComboBox>
+    <HBox GridPane.rowIndex="8" GridPane.columnIndex="0" >
+        <Label text="Адрес на собственика по талон:" textFill="black" >
+            <font>
+                <Font name="Arial bold" size="14"/>
+            </font>
+        </Label>
+    </HBox>
+        <VBox GridPane.rowIndex="8" GridPane.columnIndex="1" spacing="10">
+            <ComboBox fx:id="regionComboBox" >
+                <value>
+                    <String fx:value="-- избери област --"/>
+                </value>
+            </ComboBox>
+            <ComboBox fx:id="municipalityComboBox" >
+                <value>
+                    <String fx:value="-- избери община --"/>
+                </value>
+            </ComboBox>
+            <ComboBox fx:id="townsComboBox" >
+                <value>
+                    <String fx:value="-- избери населено място --"/>
+                </value>
+            </ComboBox>
+        </VBox>
+    <Label GridPane.rowIndex="10" GridPane.columnIndex="0" text="МПС се използва основно за:" textFill="black">
+        <font>
+            <Font name="Arial bold"  size="14" />
+        </font>
+    </Label>
+    <ComboBox fx:id="vehicleUsageComboBox" GridPane.rowIndex="10" GridPane.columnIndex="1">
+        <value>
+            <String fx:value="-- изберете --"/>
+        </value>
+    </ComboBox>
+
+
+
+</GridPane>
+
