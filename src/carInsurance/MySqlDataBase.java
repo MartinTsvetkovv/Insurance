@@ -21,6 +21,6 @@ public class MySqlDataBase extends NomenclatureType {
     }
 
     public  Map<String, Set<String>> getRegionMunicTowns(){
-        return getProvider().getRegionsMunicipalities(getName(), getSecondName());
+        return getProvider().getColumnsFromTable(getName(), getSecondName());
     }
 }
