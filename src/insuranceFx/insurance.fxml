@@ -8,6 +8,8 @@
 <?import javafx.scene.layout.Border?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Button?>
 <GridPane fx:controller="insuranceFx.ControllerFx"
           xmlns:fx="http://javafx.com/fxml" alignment="TOP_CENTER" hgap="15" vgap="15" >
     <padding>
@@ -28,7 +30,7 @@
             <Font name="Arial bold" size="14"/>
         </font>
     </Label>
-    <ComboBox fx:id="volumeComboBox" GridPane.rowIndex="1" GridPane.columnIndex="1"  >
+    <ComboBox fx:id="volumeComboBox" GridPane.rowIndex="1" GridPane.columnIndex="1" >
         <value>
             <String fx:value="-- изберете --"/>
         </value>
@@ -40,7 +42,7 @@
     </Label>
     <ComboBox fx:id="insuranceTermComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1">
         <value>
-            <String fx:value="~~ изберете ~~"/>
+            <String fx:value="-- изберете --"/>
         </value>
     </ComboBox>
     <Label text="Година на производство:" GridPane.rowIndex="4" GridPane.columnIndex="0" textFill="black">
@@ -97,8 +99,29 @@
             <String fx:value="-- изберете --"/>
         </value>
     </ComboBox>
+     <Label GridPane.rowIndex="12" GridPane.columnIndex="0" text="Наличие на виновно причинени ПТП за последните две години от водача / собственика?" textFill="black" GridPane.columnSpan="2" >
+        <font>
+            <Font name="Arial bold" size="14"/>
+        </font>
+     </Label>
+    <VBox GridPane.rowIndex="13" GridPane.columnIndex="0" spacing="10">
+        <RadioButton fx:id="yesButton" text="Да" textFill="black">
+            <font>
+                <Font name="Arial bold" size="10"/>
+            </font>
+        </RadioButton>
+        <RadioButton fx:id="noButton" text="Не" textFill="black">
+            <font>
+                <Font name="Arial bold" size="10"/>
+            </font>
+        </RadioButton>
+    </VBox>
 
-
+    <Button fx:id="calculationButton" GridPane.rowIndex="14" GridPane.columnIndex="0" textFill="black" text="Изчисли" minHeight="30" minWidth="100" >
+        <font>
+            <Font name="Arial bold" size="12"/>
+        </font>
+    </Button>
 
 </GridPane>
 

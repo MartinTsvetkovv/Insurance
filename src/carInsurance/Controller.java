@@ -28,12 +28,12 @@ public class Controller {
         String region = scanner.nextLine();
         System.out.print("Използва за: ");
         String usage = scanner.nextLine();
-        car = new Car(year, volume, usage);
+        //car = new Car(year, volume, usage);
         if (clientYearsValidation(years, region)){
             return;
         }
-        premiumCalculations = new PremiumCalculations();
-        System.out.println(premiumCalculations.carPremiumCalculations(car, client));
+        //premiumCalculations = new PremiumCalculations();
+        //System.out.println(premiumCalculations.carPremiumCalculations(car, client));
     }
 
 
@@ -51,20 +51,20 @@ public class Controller {
         System.out.print("Използва за: ");
         String usage = scanner.nextLine();
         try{
-            truck = new Truck(year,usage,load);
+           // truck = new Truck(year,usage,load);
         }catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
         }
         if (clientYearsValidation(years, region)){
             return;
         }
-        premiumCalculations = new PremiumCalculations();
-        System.out.println(premiumCalculations.truckPremiumCalculations(truck,client));
+        //premiumCalculations = new PremiumCalculations();
+        //System.out.println(premiumCalculations.truckPremiumCalculations(truck,client));
 
     }
     private boolean clientYearsValidation(int years, String region) {
         try {
-            client = new Client(years, region);
+            //client = new Client(years, region);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return true;

@@ -3,16 +3,16 @@ package carInsurance.models;
 public abstract class Vehicle {
     private int yearOfProduction;
     private int engineVolume;
-    private String usageOfTheVehicle;
+    private int usageOfTheVehicle;
 
-    Vehicle(int carYear, int engineVolume, String usageOfTheVehicle) {
+    Vehicle(int carYear, int engineVolume, int usageOfTheVehicle) {
          this.yearOfProduction = carYear;
          this.engineVolume = engineVolume;
          this.usageOfTheVehicle = usageOfTheVehicle;
     }
 
 
-    Vehicle(int carYear, String usageOfTheVehicle) {
+    Vehicle(int carYear, int usageOfTheVehicle) {
         this.yearOfProduction = carYear;
         this.usageOfTheVehicle = usageOfTheVehicle;
     }
@@ -22,10 +22,10 @@ public abstract class Vehicle {
     }
 
     public int getEngineVolume() {
-        return engineVolume;
+        return this.engineVolume;
     }
 
-    public String getUsageOfTheVehicle() {
+    public int getUsageOfTheVehicle() {
         return usageOfTheVehicle;
     }
 

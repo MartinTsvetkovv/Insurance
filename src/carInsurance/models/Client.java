@@ -6,10 +6,12 @@ import java.util.List;
 public class Client {
     private int years;
     private String addressOfTheClient;
+    private String carAccidents;
 
-    public Client(int yearsOfTheClient, String addressOfTheClient){
+    public Client(int yearsOfTheClient, String addressOfTheClient, String carAccidents){
          this.setYearsOfTheClient(yearsOfTheClient);
          this.addressOfTheClient = addressOfTheClient;
+         this.carAccidents = carAccidents;
     }
 
     public int getYearsOfTheClient() {
@@ -25,5 +27,9 @@ public class Client {
             throw new IllegalArgumentException("Invalid owner's years.");
         }
         this.years = yearsOfTheClient;
+    }
+
+    public String getCarAccidents() {
+        return this.carAccidents;
     }
 }

@@ -36,7 +36,7 @@ public class Main extends Application {
         ControllerFx controllerFx = loader.getController();
 
         primaryStage.setTitle("Car Insurance");
-        primaryStage.setScene(new Scene(root, 800, 500));
+        primaryStage.setScene(new Scene(root, 800, 650));
         primaryStage.show();
 
         controllerFx.setInsuranceData();

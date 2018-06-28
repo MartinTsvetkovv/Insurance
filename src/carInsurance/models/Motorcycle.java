@@ -1,14 +1,14 @@
 package carInsurance.models;
 
 public class Motorcycle extends Vehicle {
-    private String durationOfTheInsurance;
+    private int durationOfTheInsurance;
 
-    public Motorcycle(int carYear, int engineVolume, String usageOfTheVehicle, String durationOfTheInsurance) {
+    public Motorcycle(int carYear, int engineVolume, int usageOfTheVehicle, int durationOfTheInsurance) {
         super(carYear, engineVolume, usageOfTheVehicle);
         this.durationOfTheInsurance = durationOfTheInsurance;
     }
 
-    public String getDurationOfTheInsurance() {
+    public int getDurationOfTheInsurance() {
         return durationOfTheInsurance;
     }
 

@@ -11,7 +11,7 @@ public abstract class NomenclatureType {
         this.name = name;
     }
 
-    NomenclatureType(INomenclatureProvider provider, String name, String secondName){
+    public NomenclatureType(INomenclatureProvider provider, String name, String secondName){
         this.provider = provider;
         this.name = name;
         this.secondName = secondName;

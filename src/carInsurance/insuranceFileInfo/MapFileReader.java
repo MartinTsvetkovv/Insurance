@@ -39,7 +39,7 @@ public class MapFileReader implements INomenclatureProvider {
     }
 
     @Override
-    public Map<String, Set<String>> getRegionsMunicipalities(String firstColumn, String secondColumn) {
+    public Map<String, Set<String>> getColumnsFromTable(String firstTable, String secondTable) {
         return null;
     }
 }

@@ -47,9 +47,9 @@ public class MySqlDataBaseReader implements INomenclatureProvider {
     }
 
     @Override
-    public Map<String, Set<String>> getRegionsMunicipalities(String firstTable, String secondTable) {
-        try {
+    public Map<String, Set<String>> getColumnsFromTable(String firstTable, String secondTable) {
 
+        try {
             String driver = "com.mysql.jdbc.Driver";
             //String url = "jdbc:mysql://localhost:3309/insurance?autoReconnect=true&useSSL=false";
             String urlPath = this.connection;

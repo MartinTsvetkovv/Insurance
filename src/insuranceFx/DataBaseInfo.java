@@ -35,10 +35,9 @@ public class DataBaseInfo<K, V> {
     }
 
 
-    @SuppressWarnings("unchecked")
     public List<String> addUserYears() {
         for (int i = 18; i < 100; i++) {
-            this.userYears.add((i + " години"));
+            this.userYears.add(i + " години");
         }
         return this.userYears;
     }
@@ -49,6 +48,7 @@ public class DataBaseInfo<K, V> {
         }
         return this.carYears;
     }
+
 
 
 }
