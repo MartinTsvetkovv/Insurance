@@ -14,8 +14,15 @@ public final class Constants {
     public static final String VOLUME_MESSGAE = "Избери кубатура !";
     public static final String YEAR_OF_PRODUCTION_MESSAGE = "Избери година на производство !";
     public static final String USER_YEARS_MESSAGE = "Избери възраст на водача !";
-    public static final String REGION_MESSAGE = "Избери община!";
+    public static final String REGION_MESSAGE = "Избери община !";
     public static final String TOWN_MESSAGE = "Избери населено място!";
-    public static final String VEHICLE_USAGE_MESSAGE = "\"МПС се използва основно за:\"\n      е задължително поле!";
+    public static final String VEHICLE_USAGE_MESSAGE = "\"МПС се използва основно за:\"\n      е задължително поле !";
+    public static final String CAR_ACCIDENT_CONFIRMATION = "Да";
+    public static final String VARNA_TOWN = "варна";
+    public static final String VARNA_MUNICIPALITY = "варна";
+    public static final String PLOVDIV_TOWN = "пловдив";
+    public static final String PLOVDIV_MUNICIPALITY = "пловдив";
+    public static final String SOFIA_CAPITAL = "софия (столица)";
+    public static final String SOFIA_TOWN = "столична";
 
 }

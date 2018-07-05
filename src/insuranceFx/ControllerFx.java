@@ -3,6 +3,8 @@ package insuranceFx;
 import carInsurance.PremiumCalculations;
 import carInsurance.models.Car;
 import carInsurance.models.Client;
+import carInsurance.models.Motorcycle;
+import carInsurance.models.Truck;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.*;
@@ -55,6 +58,10 @@ public class ControllerFx {
     private Car car;
 
     private Client client;
+
+    private Truck truck;
+
+    private Motorcycle motorcycle;
 
     private Map<String, List<String>> volumeData = new HashMap<>();
 
@@ -128,17 +135,10 @@ public class ControllerFx {
         this.carYearComboBox.setItems(cYears);
 
         Map<Integer, String> vehicleUsage = dataBaseInfo.readDataBaseInfo("vehicle_usage");
-//        ObservableMap<Integer, String> usageMap = FXCollections.observableHashMap();
-//        for (Integer id : vehicleUsage.keySet()) {
-//            usageMap.putIfAbsent(id, vehicleUsage.get(id));
-//        }
+
         ObservableList<String> usageValues = FXCollections.observableArrayList(vehicleUsage.values());
         this.vehicleUsageComboBox.setItems(usageValues);
 
-//        ObservableMap<Integer, String> terms = FXCollections.observableHashMap();
-//        for (Integer id : insuranceTerm.keySet()) {
-//            terms.putIfAbsent(id, insuranceTerm.get(id));
-//        }
         ObservableList<String> InsTerms = FXCollections.observableArrayList(insuranceTerm.values());
         this.insuranceTermComboBox.setItems(InsTerms);
 
@@ -153,69 +153,117 @@ public class ControllerFx {
         this.calculationButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+
+
                 int vehicleSelect = vehicleComboBox.getSelectionModel().getSelectedIndex();
                 if (vehicleSelect == -1) {
+                    Toolkit.getDefaultToolkit().beep();
                     JOptionPane.showMessageDialog(null, Constants.VEHICLE_DIALOG_MESSAGE);
                     return;
                 }
-                int volumeIndex = volumeComboBox.getSelectionModel().getSelectedIndex();
-                if (volumeIndex == -1) {
-                    JOptionPane.showMessageDialog(null, Constants.VOLUME_MESSGAE);
-                    return;
-                }
                 int carYear;
+
                 try {
                     String selectedItem = carYearComboBox.getSelectionModel().getSelectedItem();
                     String[] splitSelectedYear = selectedItem.split(" ");
                     carYear = Integer.parseInt(splitSelectedYear[0]);
                 } catch (NumberFormatException e) {
+                    Toolkit.getDefaultToolkit().beep();
                     JOptionPane.showMessageDialog(null, Constants.YEAR_OF_PRODUCTION_MESSAGE);
                     return;
                 }
                 int user;
+
                 try {
                     String userYears = userYearsComboBox.getSelectionModel().getSelectedItem();
                     String[] split1 = userYears.split(" ");
                     user = Integer.parseInt(split1[0]);
                 } catch (NumberFormatException e) {
+                    Toolkit.getDefaultToolkit().beep();
                     JOptionPane.showMessageDialog(null, Constants.USER_YEARS_MESSAGE);
                     return;
                 }
+                //TODO
                 String region = (String) regionComboBox.getSelectionModel().getSelectedItem();
-
-                if (region.equals(Constants.DEFAULT_REGION_VALUE)) {
-                    JOptionPane.showMessageDialog(null, Constants.REGION_DIALOG_MESSAGE);
-                    return;
-                }
                 String municipality = (String) municipalityComboBox.getSelectionModel().getSelectedItem();
-                if (municipality.equals(Constants.DEFAULT_MUNICIPALITY_VALUE)) {
-                    JOptionPane.showMessageDialog(null, Constants.REGION_MESSAGE);
-                    return;
-                }
-                Object town = townsComboBox.getSelectionModel().getSelectedItem();
-                if (town.equals(Constants.DEFAULT_TOWN_VALUE)) {
-                    JOptionPane.showMessageDialog(null, Constants.TOWN_MESSAGE);
-                    return;
-                }
+                String town = (String) townsComboBox.getSelectionModel().getSelectedItem();
 
+                int volumeIndex = volumeComboBox.getSelectionModel().getSelectedIndex();
                 int usage = vehicleUsageComboBox.getSelectionModel().getSelectedIndex();
-                if (usage == -1) {
-                    JOptionPane.showMessageDialog(null, Constants.VEHICLE_USAGE_MESSAGE);
-                    return;
-                }
+
+                int termIndex = insuranceTermComboBox.getSelectionModel().getSelectedIndex();
+
                 String carAccident = toggleRadioButtons.getSelectedToggle().getUserData().toString();
-                if (vehicleSelect == 0) {
-                    car = new Car(carYear, volumeIndex, usage);
-                    client = new Client(user, region, carAccident);
 
-                    double premium = PremiumCalculations.carPremiumCalculations(car, client);
-                    JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", premium));
+                client = new Client(user, region, municipality, town, carAccident);
+                switch (vehicleSelect) {
+                    case 0:
+                        if (volumeIndex == -1) {
+                            Toolkit.getDefaultToolkit().beep();
+                            JOptionPane.showMessageDialog(null, Constants.VOLUME_MESSGAE);
+                            return;
+                        } else if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
 
-//                    if (s.equals("Да")) {
-//                        JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", premium) + 30);
-//                    } else {
-//                        JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", premium));
-//                    }
+                        car = new Car(carYear, volumeIndex, usage);
+                        double premium = PremiumCalculations.carPremiumCalculations(car, client);
+
+                        JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", premium));
+                        break;
+                    case 1:
+                        if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
+                        car = new Car(carYear, usage);
+                        double premium1 = PremiumCalculations.electricCarCalculations(car, client);
+                        JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", premium1));
+
+                        break;
+                    case 2:
+                        if (volumeIndex == -1) {
+                            Toolkit.getDefaultToolkit().beep();
+                            JOptionPane.showMessageDialog(null, "Избери товаримост !");
+                            return;
+                        } else if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
+                        truck = new Truck(carYear, usage, volumeIndex);
+                        double premium2 = PremiumCalculations.truckPremiumCalculations(truck, client);
+                        JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", premium2));
+                        break;
+
+                    case 3:
+                        if (volumeIndex == -1){
+                            Toolkit.getDefaultToolkit().beep();
+                            JOptionPane.showMessageDialog(null, "Избери брой места !");
+                            return;
+                        }
+                        if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
+                        car = new Car(volumeIndex,usage);
+                        double busPremium = PremiumCalculations.busCalculations(car,client);
+                        JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", busPremium));
+                        break;
+                    case 5:
+                        if (volumeIndex == -1){
+                            Toolkit.getDefaultToolkit().beep();
+                            JOptionPane.showMessageDialog(null, Constants.VOLUME_MESSGAE);
+                            return;
+                        }
+                        if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
+                        if (termIndex == -1 || insuranceTermComboBox.getSelectionModel().getSelectedItem().equals(Constants.SELECT)){
+                            Toolkit.getDefaultToolkit().beep();
+                            JOptionPane.showMessageDialog(null, "Избери срок на застраховката !");
+                            return;
+                        }
+                        motorcycle = new Motorcycle(carYear, volumeIndex, usage, termIndex);
+                        double bikePremium = PremiumCalculations.bikeCalculations(motorcycle, client);
+                        JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", bikePremium));
+                        break;
 
                 }
             }
@@ -258,20 +306,22 @@ public class ControllerFx {
     @FXML
     private void handleComboBoxAction() {
         int selIdx = this.vehicleComboBox.getSelectionModel().getSelectedIndex();
-        if (selIdx == 1 || selIdx == 4 || selIdx == 7 || selIdx == 8
-                || selIdx == 6 || selIdx == 10 || selIdx == 11 || selIdx == 12 || selIdx == 13) {
-            this.label.setVisible(false);
-            this.volumeComboBox.setVisible(false);
-        } else {
+        if (selIdx == 0 || selIdx == 2 || selIdx == 3 || selIdx == 5 || selIdx == 9) {
             this.label.setVisible(true);
             this.volumeComboBox.setVisible(true);
-        }
-        if (selIdx == 5) {
-            this.insTermLable.setVisible(true);
-            this.insuranceTermComboBox.setVisible(true);
         } else {
+            this.label.setVisible(false);
+            this.volumeComboBox.setVisible(false);
+            this.volumeComboBox.getItems().clear();
+        }
+        if (selIdx != 5) {
             this.insTermLable.setVisible(false);
             this.insuranceTermComboBox.setVisible(false);
+            //this.insuranceTermComboBox.getItems().clear();
+        } else {
+            this.insTermLable.setVisible(true);
+            this.insuranceTermComboBox.setVisible(true);
+            Platform.runLater(() -> insuranceTermComboBox.setValue(Constants.SELECT));
         }
     }
 
@@ -292,7 +342,30 @@ public class ControllerFx {
                 volumeComboBox.getSelectionModel().select("-- изберете --");
                 break;
         }
-
     }
+    private boolean addressAndUsageVerification(String region, String municipality, Object town, int usage) {
+        if (region.equals(Constants.DEFAULT_REGION_VALUE)) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null, Constants.REGION_DIALOG_MESSAGE);
+            return true;
+        }
 
+        if (municipality.equals(Constants.DEFAULT_MUNICIPALITY_VALUE)) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null, Constants.REGION_MESSAGE);
+            return true;
+        }
+
+        if (town.equals(Constants.DEFAULT_TOWN_VALUE)) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null, Constants.TOWN_MESSAGE);
+            return true;
+        }
+        if (usage == -1) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null, Constants.VEHICLE_USAGE_MESSAGE);
+            return true;
+        }
+        return false;
+    }
 }
