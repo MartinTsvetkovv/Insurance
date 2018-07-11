@@ -21,8 +21,27 @@ public final class Constants {
     public static final String VARNA_TOWN = "варна";
     public static final String VARNA_MUNICIPALITY = "варна";
     public static final String PLOVDIV_TOWN = "пловдив";
-    public static final String PLOVDIV_MUNICIPALITY = "пловдив";
     public static final String SOFIA_CAPITAL = "софия (столица)";
     public static final String SOFIA_TOWN = "столична";
+    public static final int CAR = 0;
+    public static final int ELECTRIC_CAR = 1;
+    public static final int CARGO_VEHICLE = 2;
+    public static final int BUS = 3;
+    public static final int SADDLE_TRACTORS = 4;
+    public static final int MOTORCYCLE = 5;
+    public static final int ATV = 6;
+    public static final int CARGO_TRAILER = 7;
+    public static final int LUGGAGE_TRAILERS = 8;
+    public static final int CAMPING_TRAILERS = 9;
+    public static final int TROLLEYBUSES = 10;
+    public static final int AGRICULTURAL_MACINERY = 11;
+    public static final int CAONSTRUCTION_MACHINERY = 12;
+    public static final int UP_TO_TON_AND_A_HALF = 0;
+    public static final int UP_T0_THREE_TONS = 1;
+    public static final int UP_TO_FIVE_TONS = 2;
+    public static final int UP_TO_TEN_TONS = 3;
+    public static final int UP_TO_TWENTY_TONNES = 4;
+    public static final int RENT = 5;
+    public static final int TAXI = 2;
 
 }

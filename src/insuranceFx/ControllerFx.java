@@ -5,6 +5,7 @@ import carInsurance.models.Car;
 import carInsurance.models.Client;
 import carInsurance.models.Motorcycle;
 import carInsurance.models.Truck;
+import com.sun.xml.internal.ws.policy.spi.PrefixMapper;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +25,6 @@ import java.util.*;
 import java.util.List;
 
 public class ControllerFx {
-
     @FXML
     private ComboBox<String> vehicleComboBox = new ComboBox<>();
     @FXML
@@ -54,6 +55,22 @@ public class ControllerFx {
     private RadioButton noButton = new RadioButton();
     @FXML
     private Button calculationButton = new Button();
+    @FXML
+    private Label totalPrice = new Label();
+    @FXML
+    private Label installments1 = new Label();
+    @FXML
+    private Label installment2 = new Label();
+    @FXML
+    private Label installment3 = new Label();
+    @FXML
+    private Label installment4 = new Label();
+    @FXML
+    private Label installment5= new Label();
+    @FXML
+    private Label installment6 = new Label();
+
+    private double premiumPrice;
 
     private Car car;
 
@@ -197,7 +214,7 @@ public class ControllerFx {
 
                 client = new Client(user, region, municipality, town, carAccident);
                 switch (vehicleSelect) {
-                    case 0:
+                    case Constants.CAR:
                         if (volumeIndex == -1) {
                             Toolkit.getDefaultToolkit().beep();
                             JOptionPane.showMessageDialog(null, Constants.VOLUME_MESSGAE);
@@ -207,20 +224,21 @@ public class ControllerFx {
                         }
 
                         car = new Car(carYear, volumeIndex, usage);
-                        double premium = PremiumCalculations.carPremiumCalculations(car, client);
-
-                        JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", premium));
+                        premiumPrice = PremiumCalculations.carPremiumCalculations(car, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
                         break;
-                    case 1:
+                    case Constants.ELECTRIC_CAR:
                         if (addressAndUsageVerification(region, municipality, town, usage)) {
                             return;
                         }
                         car = new Car(carYear, usage);
-                        double premium1 = PremiumCalculations.electricCarCalculations(car, client);
-                        JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", premium1));
+                        premiumPrice = PremiumCalculations.electricCarCalculations(car, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
 
                         break;
-                    case 2:
+                    case Constants.CARGO_VEHICLE:
                         if (volumeIndex == -1) {
                             Toolkit.getDefaultToolkit().beep();
                             JOptionPane.showMessageDialog(null, "Избери товаримост !");
@@ -229,12 +247,13 @@ public class ControllerFx {
                             return;
                         }
                         truck = new Truck(carYear, usage, volumeIndex);
-                        double premium2 = PremiumCalculations.truckPremiumCalculations(truck, client);
-                        JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", premium2));
+                        premiumPrice = PremiumCalculations.truckPremiumCalculations(truck, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
                         break;
 
-                    case 3:
-                        if (volumeIndex == -1){
+                    case Constants.BUS:
+                        if (volumeIndex == -1) {
                             Toolkit.getDefaultToolkit().beep();
                             JOptionPane.showMessageDialog(null, "Избери брой места !");
                             return;
@@ -242,12 +261,23 @@ public class ControllerFx {
                         if (addressAndUsageVerification(region, municipality, town, usage)) {
                             return;
                         }
-                        car = new Car(volumeIndex,usage);
-                        double busPremium = PremiumCalculations.busCalculations(car,client);
-                        JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", busPremium));
+                        car = new Car(volumeIndex, usage);
+                        premiumPrice = PremiumCalculations.busCalculations(car, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
                         break;
-                    case 5:
-                        if (volumeIndex == -1){
+                    case Constants.SADDLE_TRACTORS:
+                        if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
+                        car = new Car(usage);
+                        premiumPrice = PremiumCalculations.saddleTractors(car, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
+                        break;
+
+                    case Constants.MOTORCYCLE:
+                        if (volumeIndex == -1) {
                             Toolkit.getDefaultToolkit().beep();
                             JOptionPane.showMessageDialog(null, Constants.VOLUME_MESSGAE);
                             return;
@@ -255,19 +285,113 @@ public class ControllerFx {
                         if (addressAndUsageVerification(region, municipality, town, usage)) {
                             return;
                         }
-                        if (termIndex == -1 || insuranceTermComboBox.getSelectionModel().getSelectedItem().equals(Constants.SELECT)){
+                        if (termIndex == -1 || insuranceTermComboBox.getSelectionModel().getSelectedItem().equals(Constants.SELECT)) {
                             Toolkit.getDefaultToolkit().beep();
                             JOptionPane.showMessageDialog(null, "Избери срок на застраховката !");
                             return;
                         }
-                        motorcycle = new Motorcycle(carYear, volumeIndex, usage, termIndex);
-                        double bikePremium = PremiumCalculations.bikeCalculations(motorcycle, client);
-                        JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", bikePremium));
+                        motorcycle = new Motorcycle(volumeIndex,carYear, usage, termIndex);
+                        premiumPrice = PremiumCalculations.bikeCalculations(motorcycle, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
+                        //JOptionPane.showMessageDialog(null, String.format("Крайна цена %.2f лв.", premiumPrice));
+                        break;
+                    case Constants.ATV:
+                        if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
+                        car = new Car(usage);
+                        premiumPrice = PremiumCalculations.calculationsATV(car, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
+                        break;
+                    case Constants.CARGO_TRAILER:
+                        if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
+                        car = new Car(usage);
+                        premiumPrice = PremiumCalculations.cargoTrailer(car, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
+                        break;
+                    case Constants.LUGGAGE_TRAILERS:
+                        if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
+                        car = new Car(usage);
+                        premiumPrice = PremiumCalculations.luggageTrailers(car, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
+                        break;
+
+                    case Constants.CAMPING_TRAILERS:
+                        if (volumeIndex == -1) {
+                            Toolkit.getDefaultToolkit().beep();
+                            JOptionPane.showMessageDialog(null, "Избери срок на застраховката !");
+                            return;
+                        }
+                        if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
+                        car = new Car(volumeIndex, usage);
+                        premiumPrice = PremiumCalculations.campingTrailers(car, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
+                        break;
+                    case Constants.TROLLEYBUSES:
+                        if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
+                        car = new Car(usage);
+                        premiumPrice = PremiumCalculations.trolleyBusesCalculations(car, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
+                        break;
+                    case Constants.AGRICULTURAL_MACINERY:
+                        if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
+                        car = new Car(usage);
+                        premiumPrice = PremiumCalculations.agriculturalMachineryCalculations(car, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
+                        break;
+                    case Constants.CAONSTRUCTION_MACHINERY:
+                        if (addressAndUsageVerification(region, municipality, town, usage)) {
+                            return;
+                        }
+                        car = new Car(usage);
+                        premiumPrice = PremiumCalculations.constructionMachinery(car, client);
+                        premiumPrice(premiumPrice);
+                        paymentOfInstallments(premiumPrice);
                         break;
 
                 }
             }
+
         });
+    }
+
+    private void premiumPrice(double price) {
+        String format = String.format("%.2f", price);
+        totalPrice.setText(format + " лв.");
+    }
+
+    private void paymentOfInstallments(double price){
+        double firstInst = (price * 0.53);
+        String format1 = String.format("%.2f", firstInst);
+        double secondInst = (price * 0.47);
+        String format2 = String.format("%.2f", secondInst);
+        double thirdInst = (price * 0.29);
+        String format3 = String.format("%.2f", thirdInst);
+        double fourthInst = (price * 0.24);
+        String format4 = String.format("%.2f", fourthInst);
+        installments1.setText("Първа вноска = " + format1 +" лв.");
+        installment2.setText("Втора вноска = " + format2 +" лв.");
+        installment3.setText("Първа вноска = " + format3 +" лв.");
+        installment4.setText("Втора вноска = " + format4 +" лв.");
+        installment5.setText("Трета вноска = " + format4 +" лв.");
+        installment6.setText("Четвърта вноска = " + format4 +" лв.");
     }
 
     private void setVehicle(Map<Integer, String> vehicleType, Map<Integer, String> volume1,
@@ -343,6 +467,7 @@ public class ControllerFx {
                 break;
         }
     }
+
     private boolean addressAndUsageVerification(String region, String municipality, Object town, int usage) {
         if (region.equals(Constants.DEFAULT_REGION_VALUE)) {
             Toolkit.getDefaultToolkit().beep();

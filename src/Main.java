@@ -13,13 +13,6 @@ import java.util.*;
 
 public class Main extends Application {
 
-    private static final String TRUCK = "товарен автомобил";
-    private static final String CAR_VEHICLE = "Лек автомобил";
-    private static final String ELECTRIC_VEHICLE = "Електромобил";
-    private static final String SSL_CONNECTION = "?autoReconnect=true&useSSL=false";
-    //private static Controller controller;
-    private static Scanner scanner;
-
     public static void main(String[] args) throws FileNotFoundException, SQLException, ClassNotFoundException {
         launch(args);
 
@@ -36,7 +29,7 @@ public class Main extends Application {
         ControllerFx controllerFx = loader.getController();
 
         primaryStage.setTitle("Car Insurance");
-        primaryStage.setScene(new Scene(root, 800, 650));
+        primaryStage.setScene(new Scene(root, 800, 660));
         primaryStage.show();
 
         controllerFx.setInsuranceData();
@@ -44,33 +37,3 @@ public class Main extends Application {
 
     }
 }
-
-
-//        scanner = new Scanner(System.in);
-//        controller = new Controller();
-//
-//        System.out.print("Вид МПС: ");
-//        String vehicle = scanner.nextLine().toLowerCase();
-//        switch (vehicle){
-//            case (CAR_VEHICLE):
-//                controller.carInput(scanner);
-//                break;
-//            case ELECTRIC_VEHICLE :
-//                controller.carInput(scanner);
-//                break;
-//            case TRUCK:
-//                controller.truckInput(scanner);
-//                break;
-//        }
-
-
-
-
-
-//        Enumeration<Integer> enumeration;
-//        int key;
-//        for (enumeration = dataBaseInfo.keys(); enumeration.hasMoreElements(); ) {
-//            key = enumeration.nextElement();
-//            System.out.println(key + ": " + dataBaseInfo.get(key));
-//        }
-

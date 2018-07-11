@@ -5,15 +5,19 @@ public abstract class Vehicle {
     private int engineVolume;
     private int vehicleUsage;
 
-    Vehicle(int year, int engineVolume, int vehicleUsage) {
+    Vehicle(int engineVolume, int year, int vehicleUsage) {
          this.yearOfProduction = year;
          this.engineVolume = engineVolume;
          this.vehicleUsage = vehicleUsage;
     }
 
 
-    Vehicle(int carYear, int vehicleUsage) {
-        this.yearOfProduction = carYear;
+    Vehicle(int engineVolume, int vehicleUsage) {
+        this.engineVolume = engineVolume;
+        this.vehicleUsage = vehicleUsage;
+    }
+
+    Vehicle(int vehicleUsage){
         this.vehicleUsage = vehicleUsage;
     }
 

@@ -7,9 +7,13 @@ public class Car extends Vehicle {
         super(carYear, vehicleUsage);
     }
 
-    public Car(int carYear, int engineVolume, int usageOfTheVehicle) {
-        super(carYear, engineVolume, usageOfTheVehicle);
+    public Car(int carYear, int engineVolume, int vehicleUsage) {
+        super(carYear, engineVolume, vehicleUsage);
 
+    }
+
+    public Car(int vehicleUsage){
+        super(vehicleUsage);
     }
 
 }

@@ -4,17 +4,23 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.ComboBox?>
 <?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.layout.Border?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Button?>
-<GridPane fx:controller="insuranceFx.ControllerFx"
-          xmlns:fx="http://javafx.com/fxml" alignment="TOP_CENTER" hgap="15" vgap="15" >
+
+<?import javafx.scene.control.ScrollPane?>
+
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.text.Text?>
+<ScrollPane fx:controller="insuranceFx.ControllerFx"
+            xmlns:fx="http://javafx.com/fxml"  fitToWidth="true" hbarPolicy="AS_NEEDED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT"  vbarPolicy="AS_NEEDED">
+
+<GridPane  alignment="TOP_CENTER" hgap="15" vgap="15" gridLinesVisible="false"  >
     <padding>
-        <Insets top="50"/>
+        <Insets top="15"/>
     </padding>
+
     <Label   GridPane.rowIndex="0" GridPane.columnIndex="0" text="Вид МПС:" textFill="black">
         <font>
             <Font name="Arial bold" size="14"/>
@@ -115,13 +121,77 @@
                 <Font name="Arial bold" size="10"/>
             </font>
         </RadioButton>
-    </VBox>
 
-    <Button fx:id="calculationButton" GridPane.rowIndex="14" GridPane.columnIndex="0" textFill="black" text="Изчисли" minHeight="30" minWidth="100" >
+    </VBox>
+    <Button fx:id="calculationButton" GridPane.rowIndex="14" GridPane.columnIndex="0" textFill="black" text="Изчисли" minHeight="30" minWidth="150" GridPane.valignment="TOP" >
+
         <font>
             <Font name="Arial bold" size="12"/>
         </font>
     </Button>
 
-</GridPane>
 
+    <VBox GridPane.rowIndex="14" GridPane.columnIndex="1"  >
+        <Label text="Крайна цена:" textFill="black">
+            <!--<padding>-->
+                <!--<Insets top="150"/>-->
+            <!--</padding>-->
+            <font>
+                <Font name="Arial bold" size="14"/>
+            </font>
+        </Label>
+        <Label fx:id="totalPrice" textFill="blue">
+            <font>
+                <Font name="Arial " size="14"/>
+            </font>
+        </Label>
+        <Label text="Разсрочено плащане на 2 вноски:" textFill="black">
+            <padding>
+                <Insets top="3"/>
+            </padding>
+            <font>
+                <Font name="Arial bold" size="14"/>
+            </font>
+        </Label>
+        <Label fx:id="installments1" textFill="blue">
+            <font>
+                <Font name="Arial" size="14"/>
+            </font>
+        </Label>
+        <Label fx:id="installment2" textFill="blue">
+            <font>
+                <Font name="Arial" size="14"/>
+            </font>
+        </Label>
+        <Label text="Разсрочено плащане на 4 вноски:" textFill="black" >
+            <padding>
+                <Insets top="3"/>
+            </padding>
+            <font>
+                <Font name="Arial bold" size="14"/>
+            </font>
+        </Label>
+        <Label fx:id="installment3" textFill="blue">
+            <font>
+                <Font name="Arial bold  " size="14"/>
+            </font>
+        </Label>
+        <Label fx:id="installment4" textFill="blue">
+            <font>
+                <Font name="Arial  bold" size="14"/>
+            </font>
+        </Label>
+        <Label fx:id="installment5" textFill="blue">
+            <font>
+                <Font name="Arial  bold" size="14"/>
+            </font>
+        </Label>
+        <Label fx:id="installment6" textFill="blue">
+            <font>
+                <Font name="Arial bold " size="14"/>
+            </font>
+        </Label>
+    </VBox>
+
+</GridPane>
+</ScrollPane>

@@ -11,5 +11,4 @@ public interface INomenclatureProvider {
 
     Map<String, Set<String>> getColumnsFromTable(String firstColumn, String secondColumn);
 
-
 }
