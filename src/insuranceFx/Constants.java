@@ -35,13 +35,15 @@ public final class Constants {
     public static final int CAMPING_TRAILERS = 9;
     public static final int TROLLEYBUSES = 10;
     public static final int AGRICULTURAL_MACINERY = 11;
-    public static final int CAONSTRUCTION_MACHINERY = 12;
+    public static final int CONSTRUCTION_MACHINERY = 12;
     public static final int UP_TO_TON_AND_A_HALF = 0;
     public static final int UP_T0_THREE_TONS = 1;
     public static final int UP_TO_FIVE_TONS = 2;
     public static final int UP_TO_TEN_TONS = 3;
-    public static final int UP_TO_TWENTY_TONNES = 4;
+    public static final int UP_TO_TWENTY_TONS = 4;
+    public static final int OVER_TWENTY_TONS = 5;
     public static final int RENT = 5;
     public static final int TAXI = 2;
+
 
 }

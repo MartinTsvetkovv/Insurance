@@ -1,15 +1,15 @@
 package carInsurance.models;
 
 public class Truck extends Vehicle {
-    private int loadability;
+    private int loadAbility;
 
-    public Truck(int carYear, int usageOfTheVehicle, int loadability) {
+    public Truck(int loadAbility, int usageOfTheVehicle, int carYear) {
         super(carYear, usageOfTheVehicle);
-        this.loadability = loadability;
+        this.loadAbility = loadAbility;
 
     }
 
-    public int getLoadability() {
-        return loadability;
+    public int getLoadAbility() {
+        return loadAbility;
     }
 }

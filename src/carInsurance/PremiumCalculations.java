@@ -6,7 +6,6 @@ import insuranceFx.Constants;
 public class PremiumCalculations {
 
 
-
     private static double premium;
 
 
@@ -15,90 +14,158 @@ public class PremiumCalculations {
     }
 
     public static double truckPremiumCalculations(Truck truck, Client client) {
+        premium = 0;
         int usage = truck.getUsageOfTheVehicle();
-        int load = truck.getLoadability();
+        int load = truck.getLoadAbility();
         int useYears = client.getYearsOfTheClient();
         String carAccidents = client.getCarAccidents();
         boolean specialUsage = (usage == 3 || usage == 6 || usage == 7 || usage == 8);
-        if (load == Constants.UP_TO_TON_AND_A_HALF) {
-            premium = (1500 * 0.05) + 76;
-        } else if (load == Constants.UP_T0_THREE_TONS) {
-            premium = (1500 * 0.05) + 116.6;
-        } else if (load == Constants.UP_TO_FIVE_TONS) {
-            premium = (3000 * 0.05) + 96.23;
-        } else if (load == Constants.UP_TO_TEN_TONS) {
-            premium = (3500 * 0.05) + 625.43;
-        } else if (load == Constants.UP_TO_TWENTY_TONNES) {
-            premium = (5000 * 0.20) + 120.4;
-        } else {
-            premium = (5000 * 0.20) + 305.34;
-        }
-
-        if (load == 1 && useYears <= 24 && !carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && usage == 5) {
-            premium -= 27.3;
-        }
-        if (load == 1 && specialUsage && !carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
-            premium += 50.5;
-        }
 
         switch (load) {
-            case 2:
-                if (specialUsage) {
-                    premium += 150.23;
+            case Constants.UP_TO_TON_AND_A_HALF:
+                if (usage == 2) {
+                    premium += 358.88;
+                } else if (specialUsage) {
+                    premium += 661.62;
+                } else if (usage == 5) {
+                    premium += 272.39;
+                } else {
+                    premium += 229.14;
                 }
-                if (usage == Constants.RENT && client.getCarAccidents().equals(Constants.CAR_ACCIDENT_CONFIRMATION) && client.getYearsOfTheClient() > 24) {
-                    premium += 19.98;
-                }
-                break;
-            case 3:
-                if (usage == Constants.RENT) {
-                    premium += 111.25;
-                }
-                if (usage == Constants.TAXI) {
 
-                    premium += 352;
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                    premium += 54.06;
                 }
-                if (specialUsage) {
-                    premium += 1250.23;
-                }
-                break;
-            case 4:
-                if (usage == Constants.TAXI) {
-                    premium += 571;
-                }
-                if (usage == Constants.RENT) {
-                    premium += 190.26;
-                }
-                if (specialUsage) {
-                    premium += 1925.81;
-                }
-                break;
-            case 5:
-                if (usage == Constants.TAXI) {
-                    premium += 657.31;
-                }
-                if (usage == Constants.RENT) {
-                    premium += 190.26;
-                }
-                if (specialUsage) {
-                    premium += 2246.76;
+                userUnder24YearsTruckCalculations(useYears, specialUsage);
+
+                if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+                    if (usage == 2) {
+                        premium += 8.16;
+                    } else if (specialUsage) {
+                        premium += 15.3;
+                    } else if (usage == 5) {
+                        premium += 6.12;
+                    } else {
+                        premium += 6.12;
+                    }
                 }
                 break;
+
+            case Constants.UP_T0_THREE_TONS:
+                if (usage == 2) {
+                    premium += 407.84;
+                } else if (specialUsage) {
+                    premium += 753.42;
+                } else if (usage == 5) {
+                    premium += 309.11;
+                } else {
+                    premium += 259.74;
+                }
+
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                    premium += 61.71;
+                }
+                userUnder24YearsTruckCalculations(useYears, specialUsage);
+
+                truckSofiaTownCalculations(client, usage, carAccidents, specialUsage);
+                break;
+            case Constants.UP_TO_FIVE_TONS:
+                if (usage == 2) {
+                    premium += 489.44;
+                } else if (specialUsage) {
+                    premium += 906.42;
+                } else if (usage == 5) {
+                    premium += 370.31;
+                } else {
+                    premium += 310.74;
+                }
+
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                    premium += 74.46;
+                }
+
+                userUnder24YearsTruckCalculations(useYears, specialUsage);
+
+                truckSofiaTownCalculations(client, usage, carAccidents, specialUsage);
+                break;
+
+            case Constants.UP_TO_TEN_TONS:
+                if (usage == 2) {
+                    premium += 1563.3;
+                } else if (specialUsage) {
+                    premium += 2919.9;
+                } else if (usage == 5) {
+                    premium += 1175.7;
+                } else {
+                    premium += 981.9;
+                }
+
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                    premium += 242.25;
+                }
+
+                userUnder24YearsTruckCalculations(useYears, specialUsage);
+                break;
+            case Constants.UP_TO_TWENTY_TONS:
+                if (usage == 2) {
+                    premium += 2183.46;
+                } else if (specialUsage) {
+                    premium += 4082.7;
+                } else if (usage == 5) {
+                    premium += 1640.82;
+                } else {
+                    premium += 1369.5;
+                }
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                    premium += 339.15;
+                }
+                userUnder24YearsTruckCalculations(useYears, specialUsage);
+                break;
+            case Constants.OVER_TWENTY_TONS:
+                if (usage == 2) {
+                    premium += 2493.54;
+                } else if (specialUsage) {
+                    premium += 4664.1;
+                } else if (usage == 5) {
+                    premium += 1873.38;
+                } else {
+                    premium += 1563.3;
+                }
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                    premium += 387.6;
+                }
+                userUnder24YearsTruckCalculations(useYears, specialUsage);
+                break;
+
         }
 
-        premium = getCalculateClientYears(client, truck, premium);
-        premium = getAddressCalculations(client, premium);
-        premium = getVehicleUsageCalculations(truck, premium);
-        premium = getCarAccidentCalc(client, premium);
+
         return premium;
     }
 
-    public static double campingTrailers(Car car, Client client) {
+    private static void truckSofiaTownCalculations(Client client, int usage, String carAccidents, boolean specialUsage) {
+        if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+            if (usage == 2) {
+                premium += 16.32;
+            } else if (specialUsage) {
+                premium += 30.6;
+            } else if (usage == 5) {
+                premium += 12.24;
+            } else {
+                premium += 10.2;
+            }
+            if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                premium += 3.1;
+            }
+        }
+    }
+
+    public static double campingTrailers(CampingTrailers campingTrailers, Client client) {
         premium = 0;
-        int termOfTheInsurance = car.getEngineVolume();
+        int termOfTheInsurance = campingTrailers.getEngineVolume();
         String carAccidents = client.getCarAccidents();
         int userYears = client.getYearsOfTheClient();
-        int vehicleUsage = car.getUsageOfTheVehicle();
+        int vehicleUsage = campingTrailers.getUsageOfTheVehicle();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
 
         switch (termOfTheInsurance) {
@@ -107,20 +174,20 @@ public class PremiumCalculations {
                     if (userYears <= 24) {
                         premium += 25.5;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                         premium += 13.26;
                     }
                     premium += 52.68;
                 } else if (specialUsage) {
                     premium += 126.94;
                 } else if (vehicleUsage == 5) {
-                    if (userYears <= 24){
+                    if (userYears <= 24) {
                         premium += 13.46;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                         premium += 1.4;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && userYears <= 24){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && userYears <= 24) {
                         premium += 11.86;
                     }
                     premium += 43.5;
@@ -128,7 +195,7 @@ public class PremiumCalculations {
                     if (userYears <= 24) {
                         premium += 2.86;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && userYears <= 24){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && userYears <= 24) {
                         premium += 13.26;
                     }
                     premium += 43.5;
@@ -139,17 +206,17 @@ public class PremiumCalculations {
                     if (userYears <= 24) {
                         premium += 25.5;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
-                       premium += 13.26;
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
+                        premium += 13.26;
                     }
                     premium += 65.94;
                 } else if (specialUsage) {
                     premium += 140.2;
                 } else if (vehicleUsage == 5) {
-                    if (userYears <= 24){
+                    if (userYears <= 24) {
                         premium += 25.5;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                         premium += 13.26;
                     }
                     premium += 44.72;
@@ -157,10 +224,10 @@ public class PremiumCalculations {
                     if (userYears <= 24) {
                         premium += 16.12;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && userYears <= 24){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && userYears <= 24) {
                         premium += 9.38;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                         premium += 3.88;
                     }
                     premium += 43.5;
@@ -171,17 +238,17 @@ public class PremiumCalculations {
                     if (userYears <= 24) {
                         premium += 25.5;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                         premium += 13.26;
                     }
                     premium += 76.55;
                 } else if (specialUsage) {
                     premium += 150.8;
                 } else if (vehicleUsage == 5) {
-                    if (userYears <= 24){
+                    if (userYears <= 24) {
                         premium += 25.5;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                         premium += 13.26;
                     }
                     premium += 55.33;
@@ -189,7 +256,7 @@ public class PremiumCalculations {
                     if (userYears <= 24) {
                         premium += 26.12;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                         premium += 13.26;
                     }
                     premium += 44.72;
@@ -200,17 +267,17 @@ public class PremiumCalculations {
                     if (userYears <= 24) {
                         premium += 25.5;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                         premium += 13.26;
                     }
                     premium += 97.76;
                 } else if (specialUsage) {
                     premium += 172.02;
                 } else if (vehicleUsage == 5) {
-                    if (userYears <= 24){
+                    if (userYears <= 24) {
                         premium += 25.5;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                         premium += 13.26;
                     }
                     premium += 76.55;
@@ -218,7 +285,7 @@ public class PremiumCalculations {
                     if (userYears <= 24) {
                         premium += 26.12;
                     }
-                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                         premium += 13.26;
                     }
                     premium += 65.94;
@@ -228,9 +295,9 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double luggageTrailers(Car car, Client client) {
+    public static double luggageTrailers(LuggageTrailer luggageTrailer, Client client) {
         premium = 0;
-        int vehicleUsage = car.getUsageOfTheVehicle();
+        int vehicleUsage = luggageTrailer.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
         String carAccidents = client.getCarAccidents();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
@@ -246,7 +313,7 @@ public class PremiumCalculations {
 
         under24YearsUserCalculations(userYears, specialUsage);
 
-        if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage) {
+        if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
             premium += 18.4;
         }
 
@@ -276,9 +343,9 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double trolleyBusesCalculations(Car car, Client client){
+    public static double trolleyBusesCalculations(Trolleybus trolleybus, Client client) {
         premium = 0;
-        int vehicleUsage = car.getUsageOfTheVehicle();
+        int vehicleUsage = trolleybus.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
         String carAccidents = client.getCarAccidents();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
@@ -286,43 +353,43 @@ public class PremiumCalculations {
         if (vehicleUsage == 2) {
             premium += 603.68;
         } else if (specialUsage) {
-             premium += 1120.62;
+            premium += 1120.62;
         } else if (vehicleUsage == 5) {
             premium += 455.99;
         } else {
             premium += 382.14;
         }
-        if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage){
+        if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
             premium += 92.31;
         }
-        if (userYears <= 24 && !specialUsage){
+        if (userYears <= 24 && !specialUsage) {
             premium += 51.0;
         }
 
-        if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)){
+        if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
             if (vehicleUsage == 2) {
-                if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                     premium += 39.77;
                 }
-                if (userYears <= 24){
+                if (userYears <= 24) {
                     premium += 27.02;
                 }
                 premium += 54.58;
             } else if (specialUsage) {
                 premium += 153.0;
             } else if (vehicleUsage == 5) {
-                if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                     premium += 12.75;
                 }
                 premium += 61.2;
             } else {
-                if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)){
+                if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
                     premium += 12.75;
                 }
                 premium += 51.0;
             }
         }
-        if (client.getMunicipality().equalsIgnoreCase(Constants.PLOVDIV_TOWN) || client.getTown().equalsIgnoreCase(Constants.VARNA_TOWN)){
+        if (specialTownsVarnaPlovdiv(client)) {
             if (vehicleUsage == 2) {
                 premium += 16.32;
             } else if (specialUsage) {
@@ -333,15 +400,16 @@ public class PremiumCalculations {
             } else {
                 premium += 10.0;
             }
-            if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage){
+            if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
                 premium += 3.1;
             }
         }
         return premium;
     }
-    public static double constructionMachinery(Car car, Client client){
+
+    public static double constructionMachinery(ConstructionMachinery constructionMachinery, Client client) {
         premium = 0;
-        int vehicleUsage = car.getUsageOfTheVehicle();
+        int vehicleUsage = constructionMachinery.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
         if (vehicleUsage == 2) {
@@ -354,60 +422,60 @@ public class PremiumCalculations {
             premium += 128.16;
         }
 
-        if (client.getCarAccidents().equals(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage){
+        if (vehicleAccidentConfirmation(client.getCarAccidents(), specialUsage)) {
             premium += 28.82;
         }
 
-        if (userYears <= 24 && !specialUsage){
+        if (userYears <= 24 && !specialUsage) {
             premium += 25.5;
         }
         return premium;
     }
 
-    public static double agriculturalMachineryCalculations(Car car, Client client){
+    public static double agriculturalMachineryCalculations(AgriculturalMachinery machinery, Client client) {
         premium = 0;
-        int vehicleUsage = car.getUsageOfTheVehicle();
+        int vehicleUsage = machinery.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
         String carAccidents = client.getCarAccidents();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
-        if (vehicleUsage == 2) {
+        if (vehicleUsage == Constants.TAXI) {
             premium += 163.04;
         } else if (specialUsage) {
             premium += 294.42;
-        } else if (vehicleUsage == 5) {
+        } else if (vehicleUsage == Constants.RENT) {
             premium += 125.51;
         } else {
             premium += 106.74;
         }
 
-        if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage){
+        if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
             premium += 23.46;
         }
-        if (userYears <= 24 && !specialUsage){
+        if (userYears <= 24 && !specialUsage) {
             premium += 25.5;
         }
 
-        if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)){
-            if (vehicleUsage == 2) {
-                    premium += 16.32;
+        if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+            if (vehicleUsage == Constants.TAXI) {
+                premium += 16.32;
             } else if (specialUsage) {
                 premium += 30.60;
-            } else if (vehicleUsage == 5) {
+            } else if (vehicleUsage == Constants.RENT) {
                 premium += 12.24;
             } else {
                 premium += 10.2;
             }
-            if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage){
+            if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
                 premium += 3.41;
             }
         }
-        if (client.getMunicipality().equalsIgnoreCase(Constants.PLOVDIV_TOWN) || client.getTown().equalsIgnoreCase(Constants.VARNA_TOWN)){
-            if (vehicleUsage == 2) {
+        if (specialTownsVarnaPlovdiv(client)) {
+            if (vehicleUsage == Constants.TAXI) {
                 premium += 8.16;
             } else if (specialUsage) {
                 premium += 15.3;
-            } else if (vehicleUsage == 5) {
-               premium += 6.12;
+            } else if (vehicleUsage == Constants.RENT) {
+                premium += 6.12;
             } else {
                 premium += 5.1;
             }
@@ -415,18 +483,18 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double cargoTrailer(Car car, Client client) {
+    public static double cargoTrailer(CargoTrailer cargoTrailer, Client client) {
         premium = 0;
-        int vehicleUsage = car.getUsageOfTheVehicle();
+        int vehicleUsage = cargoTrailer.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
         String carAccidents = client.getCarAccidents();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
 
-        if (vehicleUsage == 2) {
+        if (vehicleUsage == Constants.TAXI) {
             premium += 166.31;
         } else if (specialUsage) {
             premium += 300.54;
-        } else if (vehicleUsage == 5) {
+        } else if (vehicleUsage == Constants.RENT) {
             premium += 127.96;
         } else {
             premium += 108.78;
@@ -441,17 +509,17 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double saddleTractors(Car car, Client client) {
+    public static double saddleTractors(SaddleTractor saddleTractor, Client client) {
         premium = 0;
-        int vehicleUsage = car.getUsageOfTheVehicle();
+        int vehicleUsage = saddleTractor.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
         String carAccidents = client.getCarAccidents();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
-        if (vehicleUsage == 2) {
+        if (vehicleUsage == Constants.TAXI) {
             premium += 5417.69;
         } else if (specialUsage) {
             premium += 10146.89;
-        } else if (vehicleUsage == 5) {
+        } else if (vehicleUsage == Constants.RENT) {
             premium += 4066.49;
         } else {
             premium += 3390.90;
@@ -461,16 +529,16 @@ public class PremiumCalculations {
             premium += 40.8;
         }
 
-        if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage) {
+        if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
             premium += 844.49;
         }
 
         return premium;
     }
 
-    public static double calculationsATV(Car car, Client client) {
+    public static double calculationsATV(ATV atv, Client client) {
         premium = 0;
-        int vehicleUsage = car.getUsageOfTheVehicle();
+        int vehicleUsage = atv.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
         String carAccidents = client.getCarAccidents();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
@@ -486,7 +554,7 @@ public class PremiumCalculations {
         }
         under24YearsUserCalculations(userYears, specialUsage);
 
-        if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage) {
+        if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
             premium += 36.21;
         }
 
@@ -517,12 +585,12 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double busCalculations(Car car, Client client) {
+    public static double busCalculations(Bus bus, Client client) {
         premium = 0;
-        int busSeats = car.getEngineVolume();
+        int busSeats = bus.getEngineVolume();
         String carAccidents = client.getCarAccidents();
         int userYears = client.getYearsOfTheClient();
-        int vehicleUsage = car.getUsageOfTheVehicle();
+        int vehicleUsage = bus.getUsageOfTheVehicle();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
 
         switch (busSeats) {
@@ -549,7 +617,7 @@ public class PremiumCalculations {
                 //under 24 years without accident
                 under24YearsUsers(userYears, vehicleUsage);
 
-                if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage) {
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
                     premium += 92.31;
                 }
 
@@ -572,7 +640,7 @@ public class PremiumCalculations {
                 //......||......
                 under24YearsUsers(userYears, vehicleUsage);
 
-                if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage) {
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
                     premium += 141.02;
                 }
                 premium += 6.96;
@@ -591,7 +659,7 @@ public class PremiumCalculations {
 
                 under24YearsUsers(userYears, vehicleUsage);
 
-                if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage) {
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
                     premium += 194.31;
                 }
 
@@ -671,13 +739,7 @@ public class PremiumCalculations {
                 premium += 26.34;
             } else if (yearsOfTheClient <= 24 && (usage == 0 || usage == 1 || usage == 4 || usage == 9
                     || usage == 10 || usage == 11 || usage == 12 || usage == 13)) {
-                if (durationOfTheInsurance == 1) {
-                    premium += 15.1;
-                }
-                if (durationOfTheInsurance == 2) {
-                    premium += 15.1;
-                }
-                if (durationOfTheInsurance == 3) {
+                if (durationOfTheInsurance == 1 || durationOfTheInsurance == 2 || durationOfTheInsurance == 3) {
                     premium += 15.3;
                 }
                 premium += 10.2;
@@ -804,10 +866,7 @@ public class PremiumCalculations {
                     if (durationOfTheInsurance == 1) {
                         premium += 14.36;
                     }
-                    if (durationOfTheInsurance == 2) {
-                        premium += 13.22;
-                    }
-                    if (durationOfTheInsurance == 3) {
+                    if (durationOfTheInsurance == 2 || durationOfTheInsurance == 3) {
                         premium += 13.34;
                     }
                     premium += 12.2;
@@ -1113,56 +1172,475 @@ public class PremiumCalculations {
 
 
     public static double carPremiumCalculations(Car car, Client client) {
-        if (car.getEngineVolume() == 0 || car.getEngineVolume() == 1) {
-            premium = (1100 * 0.11) + 17;
-        } else if (car.getEngineVolume() == 2) {
-            premium = (1100 * 0.11) + 18.32;
-        } else if (car.getEngineVolume() == 3) {
-            premium = (1100 * 0.11) + 19.21;
-        } else if (car.getEngineVolume() == 4) {
-            premium = (1100 * 0.11) + 22;
-        } else if (car.getEngineVolume() == 5) {
-            premium = (1100 * 0.11) + 30.52;
-        } else if (car.getEngineVolume() == 6) {
-            premium = (1100 * 0.11) + 61.65;
-        } else if (car.getEngineVolume() == 7) {
-            premium = (1100 * 0.11) + 68;
-        } else {
-            premium = (1100 * 0.11) + 89.22;
-        }
-        if (client.getCarAccidents().equals(Constants.CAR_ACCIDENT_CONFIRMATION) && car.getEngineVolume() == 4) {
-            premium += 10.12;
-        }
-
-        premium = getCalculateClientYears(client, car, premium);
-        premium = getAddressCalculations(client, premium);
-        premium = getVehicleUsageCalculations(car, premium);
-        premium = getCarYearsCalculations(car, premium);
-        premium = getCarAccidentCalc(client, premium);
-
-        return premium;
-    }
-
-    public static double electricCarCalculations(Car car, Client client) {
-
         premium = 0;
+        int engineVolume = car.getEngineVolume();
+        int usage = car.getUsageOfTheVehicle();
+        String carAccidents = client.getCarAccidents();
+        int carYear = car.getYear();
+        boolean specialUsage = (usage == 3 || usage == 6 || usage == 7 || usage == 8);
 
-        premium = getCalculateClientYears(client, car, premium);
-        premium = getAddressCalculations(client, premium);
-        premium = getVehicleUsageCalculations(car, premium);
-        premium = getCarAccidentCalc(client, premium);
+        if (engineVolume == 0 || engineVolume == 1) {
+            carCalculations(client, carYear, usage, carAccidents, specialUsage);
 
-        premium += 150.25;
+        }
+        switch (engineVolume) {
+            case 2:
+                carCalculations(client, carYear, usage, carAccidents, specialUsage);
+                if (usage == 2 || usage == 5) {
+                    premium += 2.1;
+                }
+                if (specialUsage) {
+                    premium += 5.1;
+                }
+                if ((carYear > 2003 && !specialUsage) && (!specialTownsVarnaPlovdiv(client) && !specialTownsBurgasSofiaStaraZagora(client)
+                        && !client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN))) {
+                    premium += 4.86;
+                }
+                premium += 2.1;
+                break;
+            case 3:
+                carCalculations(client, carYear, usage, carAccidents, specialUsage);
+                if (usage == 2) {
+                    premium += 3.38;
+                }
+                if (specialUsage) {
+                    premium += 10.0;
+                }
+                if (usage == 5) {
+                    premium += 2.34;
+                } else if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && specialTownsVarnaPlovdiv(client)) {
+                    premium += 2.86;
+                } else if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+                    premium += 2.1;
+                }
+                premium += 3.96;
+                break;
+            case 4:
+                carCalculations(client, carYear, usage, carAccidents, specialUsage);
+                if (usage == 2) {
+                    premium += 5.06;
+                } else if (usage == 5) {
+                    premium += 2.3;
+                } else if (specialUsage) {
+                    premium += 14.68;
+                }
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                    premium += 2.20;
+                }
+                if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && specialTownsBurgasSofiaStaraZagora(client)) {
+                    premium -= 3.1;
+                }
+                if (specialTownsVarnaPlovdiv(client) || client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+                    premium += 4.95;
+                }
+                if ((specialTownsVarnaPlovdiv(client) && usage == 2)
+                        || (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN) && usage == 2)) {
+                    premium += 4.98;
+                }
+                if ((specialTownsVarnaPlovdiv(client) && specialUsage) ||
+                        (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN) && specialUsage)) {
+                    premium += 12.39;
+                }
+                if (specialTownsVarnaPlovdiv(client) && carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)
+                        && !specialUsage) {
+                    premium += 4.86;
+                }
+                premium += 5.94;
+                break;
+            case 5:
+                carCalculations(client, carYear, usage, carAccidents, specialUsage);
+                if (usage == 0) {
+                    premium += 14.86;
+                } else if (usage == 2) {
+                    premium += 23.84;
+                } else if (specialUsage) {
+                    premium += 44.7;
+                } else if (usage == 5) {
+                    premium += 17.63;
+                } else {
+                    premium += 14.9;
+                }
+                if (carAccidents.equalsIgnoreCase(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage) {
+                    premium += 3.21;
+                }
+                if (specialTownsVarnaPlovdiv(client)) {
+                    if (usage == 0) {
+                        premium += 7.77;
+                    } else if (usage == 2) {
+                        premium += 14.66;
+                    } else if (specialUsage) {
+                        premium += 27.48;
+                    } else if (usage == 5) {
+                        premium += 11.24;
+                    } else {
+                        premium += 9.16;
+                    }
+                    if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                        premium += 4.21;
+                    }
+                }
+
+                if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+                    if (usage == 0) {
+                        premium += 10.89;
+                    } else if (usage == 2) {
+                        premium += 20.16;
+                    } else if (specialUsage) {
+                        premium += 37.79;
+                    } else if (usage == 5) {
+                        premium += 15.37;
+                    } else {
+                        premium += 12.6;
+                    }
+                    if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                        premium += 4.21;
+                    }
+                }
+                break;
+            case 6:
+                carCalculations(client, carYear, usage, carAccidents, specialUsage);
+                if (usage == 0) {
+                    premium += 48.5;
+                } else if (usage == 2) {
+                    premium += 89.86;
+                } else if (specialUsage) {
+                    premium += 168.48;
+                } else if (usage == 5) {
+                    premium += 67.14;
+                } else {
+                    premium += 56.16;
+                }
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                    premium += 14.0;
+                }
+                if (specialTownsBurgasSofiaStaraZagora(client)) {
+                    carCalculationsBurgasSofiaSz(usage, specialUsage);
+                }
+                carCalculationsVarnaPlovdiv(client, usage, carAccidents, specialUsage);
+
+                caCalculationsSofiaTown(client, carYear, usage, carAccidents, specialUsage);
+                break;
+            case 7:
+                carCalculations(client, carYear, usage, carAccidents, specialUsage);
+
+                if (usage == 0) {
+                    premium += 49.48;
+                } else if (usage == 2) {
+                    premium += 91.97;
+                } else if (specialUsage) {
+                    premium += 171.94;
+                } else if (usage == 5) {
+                    premium += 68.53;
+                } else {
+                    premium += 57.32;
+                }
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                    premium += 14.32;
+                }
+                if (specialTownsBurgasSofiaStaraZagora(client)) {
+                    carCalculationsBurgasSofiaSz(usage, specialUsage);
+                }
+
+                carCalculationsVarnaPlovdiv(client, usage, carAccidents, specialUsage);
+
+                caCalculationsSofiaTown(client, carYear, usage, carAccidents, specialUsage);
+                break;
+            case 8:
+                carCalculations(client, carYear, usage, carAccidents, specialUsage);
+
+                if (usage == 0) {
+                    if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
+                        premium -= 2.14;
+                    }
+                    premium += 74.2;
+                } else if (usage == 2) {
+                    premium += 137.53;
+                } else if (specialUsage) {
+                    premium += 257.86;
+                } else if (usage == 5) {
+                    premium += 102.9;
+                } else {
+                    premium += 85.96;
+                }
+                if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                    premium += 21.56;
+                }
+
+                if (specialTownsBurgasSofiaStaraZagora(client)) {
+                    carCalculationsBurgasSofiaSz(usage, specialUsage);
+                }
+                if (specialTownsVarnaPlovdiv(client)) {
+                    if (usage == 0) {
+                        premium += 3.8;
+                    } else if (usage == 2) {
+                        premium += 7.3;
+                    } else if (specialUsage) {
+                        premium += 13.74;
+                    } else if (usage == 5) {
+                        premium += 5.74;
+                    } else {
+                        premium += 4.26;
+                    }
+                    if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                        premium += 4.21;
+                    }
+                }
+                if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+                    if (usage == 0) {
+                        if (carYear > 2003) {
+                            premium += 3.1;
+                        }
+                        premium += 7.93;
+                    } else if (usage == 2) {
+                        premium += 14.69;
+                    } else if (specialUsage) {
+                        premium += 27.54;
+                    } else if (usage == 5) {
+                        premium += 11.27;
+                    } else {
+                        premium += 9.18;
+                    }
+                    if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                        premium += 3.1;
+                    }
+                }
+                break;
+
+        }
+
 
         return premium;
     }
 
-    private static double getCarYearsCalculations(Vehicle vehicle, double premium) {
-        if (vehicle.getYear() <= 2004) {
-            premium += 7.36;
-        } else {
-            premium += 11.28;
+    private static void caCalculationsSofiaTown(Client client, int carYear, int usage, String carAccidents, boolean specialUsage) {
+        if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+            if (usage == 0) {
+                if (carYear > 2003) {
+                    premium += 2.1;
+                }
+                premium += 12.86;
+            } else if (usage == 2) {
+                premium += 25.66;
+            } else if (specialUsage) {
+                premium += 48.1;
+            } else if (usage == 5) {
+                premium += 19.5;
+            } else {
+                premium += 16.04;
+            }
+            if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                premium += 4.21;
+            }
         }
+    }
+
+    private static boolean vehicleAccidentConfirmation(String carAccidents, boolean specialUsage) {
+        return carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION) && !specialUsage;
+    }
+
+    private static void userUnder24YearsTruckCalculations(int useYears, boolean specialUsage) {
+        if (useYears <= 24 && !specialUsage) {
+            premium += 61.2;
+        }
+    }
+
+    private static void carCalculationsVarnaPlovdiv(Client client, int usage, String carAccidents, boolean specialUsage) {
+        if (specialTownsVarnaPlovdiv(client)) {
+            if (usage == 0) {
+                premium += 8.75;
+            } else if (usage == 2) {
+                premium += 16.5;
+            } else if (specialUsage) {
+                premium += 30.94;
+            } else if (usage == 5) {
+                premium += 12.63;
+            } else {
+                premium += 10.32;
+            }
+            if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                premium += 4.21;
+            }
+        }
+    }
+
+    private static void carCalculationsBurgasSofiaSz(int usage, boolean specialUsage) {
+        if (usage == 0) {
+            premium -= 3.69;
+        } else if (usage == 2) {
+            premium -= 6.62;
+        } else if (specialUsage) {
+            premium -= 12.42;
+        } else if (usage == 5) {
+            premium -= 4.6;
+        } else {
+            premium -= 4.14;
+        }
+    }
+
+    private static void carCalculations(Client client, int carYear, int usage, String carAccidents, boolean specialUsage) {
+        if (usage == 0) {
+            if (carYear > 2003) {
+                premium += 4.86;
+            }
+            if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+                premium += 11.87;
+            }
+            if (specialTownsBurgasSofiaStaraZagora(client)) {
+                premium -= 14.89;
+            }
+
+            if (specialTownsVarnaPlovdiv(client)) {
+                premium += 4.1;
+            }
+            if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
+                premium += 47.8;
+            }
+            premium += 204.1;
+        } else if (usage == 2) {
+            if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+                premium += 22.01;
+            }
+            if (specialTownsBurgasSofiaStaraZagora(client)) {
+                premium -= 27.62;
+            }
+            if (specialTownsVarnaPlovdiv(client)) {
+                premium += 7.34;
+            }
+            if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
+                premium += 53.83;
+            }
+            premium += 357.45;
+        } else if (specialUsage) {
+            if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+                premium += 41.28;
+            }
+            if (specialTownsBurgasSofiaStaraZagora(client)) {
+                premium -= 51.78;
+            }
+            if (specialTownsVarnaPlovdiv(client)) {
+                premium += 13.77;
+            }
+            premium += 658.93;
+        } else if (usage == 5) {
+            if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+                premium += 16.26;
+            }
+            if (specialTownsBurgasSofiaStaraZagora(client)) {
+                premium -= 21.1;
+            }
+            if (specialTownsVarnaPlovdiv(client)) {
+                premium += 5.26;
+            }
+            if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
+                premium += 53.59;
+            }
+            premium += 271.56;
+        } else {
+            if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+                premium += 13.76;
+            }
+            if (specialTownsBurgasSofiaStaraZagora(client)) {
+                premium -= 17.26;
+            }
+            if (specialTownsVarnaPlovdiv(client)) {
+                premium += 4.59;
+            }
+            if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
+                premium += 53.84;
+            }
+            premium += 228.24;
+        }
+        if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)
+                && carAccidents.equalsIgnoreCase(Constants.CAR_ACCIDENT_CONFIRMATION)
+                && !specialUsage) {
+            premium += 3.5;
+        }
+
+        if (specialTownsBurgasSofiaStaraZagora(client) && !specialUsage && carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
+            premium -= 4.02;
+        }
+
+        if (client.getYearsOfTheClient() <= 24 && !specialUsage) {
+            premium += 79.56;
+        }
+    }
+
+    public static double electricCarCalculations(ElectricCar car, Client client) {
+        premium = 0;
+        int usage = car.getUsageOfTheVehicle();
+        String carAccidents = client.getCarAccidents();
+        int userYears = client.getYearsOfTheClient();
+        boolean specialUsage = (usage == 3 || usage == 6 || usage == 7 || usage == 8);
+
+        if (usage == 0) {
+            if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
+                premium -= 6.19;
+            }
+            premium += 208.06;
+        } else if (usage == 2) {
+            premium += 364.79;
+        } else if (specialUsage) {
+            premium += 672.7;
+        } else if (usage == 5) {
+            premium += 276.82;
+        } else {
+            premium += 232.83;
+        }
+
+        if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+            premium += 54.98;
+        }
+        if (userYears <= 24 && !specialUsage) {
+            premium += 79.56;
+        }
+
+        if (specialTownsBurgasSofiaStaraZagora(client)) {
+            if (usage == 0) {
+                premium -= 16.21;
+            } else if (usage == 2) {
+                premium -= 30.06;
+            } else if (specialUsage) {
+                premium -= 56.37;
+            } else if (usage == 5) {
+                premium -= 22.55;
+            } else {
+                premium -= 18.79;
+            }
+        }
+
+        if (specialTownsVarnaPlovdiv(client)) {
+            if (usage == 0) {
+                premium += 4.58;
+            } else if (usage == 2) {
+                premium += 7.33;
+            } else if (specialUsage) {
+                premium += 14.0;
+            } else if (usage == 5) {
+                premium += 5.49;
+            } else {
+                premium += 4.58;
+            }
+            if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                premium += 1.67;
+            }
+        }
+        if (client.getMunicipality().equalsIgnoreCase(Constants.SOFIA_TOWN)) {
+            if (usage == 0) {
+                premium += 12.86;
+            } else if (usage == 2) {
+                premium += 23.83;
+            } else if (specialUsage) {
+                premium += 44.67;
+            } else if (usage == 5) {
+                premium += 17.87;
+            } else {
+                premium += 14.89;
+            }
+            if (vehicleAccidentConfirmation(carAccidents, specialUsage)) {
+                premium += 3.5;
+            }
+        }
+
         return premium;
     }
 
@@ -1173,68 +1651,15 @@ public class PremiumCalculations {
                         && !client.getCarAccidents().equals(Constants.CAR_ACCIDENT_CONFIRMATION);
     }
 
-
-    private static double getAddressCalculations(Client client, double premium) {
-        switch (client.getRegion().toLowerCase()) {
-            case "софия":
-                premium += 8.25;
-                break;
-            default:
-                premium += 22.47;
-                break;
-        }
-        if ((client.getMunicipality().equalsIgnoreCase("бургас") && client.getTown().equalsIgnoreCase("бургас")
-                || (client.getMunicipality().equalsIgnoreCase("стара загора") && client.getTown().equalsIgnoreCase("стара загора")))) {
-            premium -= 15.25;
-        }
-
-        if ((client.getMunicipality().equalsIgnoreCase("варна") && client.getTown().equalsIgnoreCase("варна")) ||
-                (client.getMunicipality().equalsIgnoreCase("пловдив") && client.getTown().equalsIgnoreCase("пловдив"))) {
-            premium += 3.26;
-        }
-        if (client.getRegion().equalsIgnoreCase("софия (столица)") && client.getMunicipality().equalsIgnoreCase("столична")) {
-            premium += 11.24;
-        }
-        return premium;
+    private static boolean specialTownsBurgasSofiaStaraZagora(Client client) {
+        return client.getTown().equalsIgnoreCase("бургас") || client.getTown().equalsIgnoreCase("стара загора")
+                || client.getRegion().equalsIgnoreCase("софия");
     }
 
-    private static double getCarAccidentCalc(Client client, double premium) {
-        String carAccidents = client.getCarAccidents();
-        if (carAccidents.equals(Constants.CAR_ACCIDENT_CONFIRMATION)) {
-            premium += 49.12;
-        }
-        return premium;
+    private static boolean specialTownsVarnaPlovdiv(Client client) {
+        return client.getMunicipality().equalsIgnoreCase(Constants.PLOVDIV_TOWN) || client.getTown().equalsIgnoreCase(Constants.VARNA_TOWN);
     }
 
-    private static double getVehicleUsageCalculations(Vehicle vehicle, double premium) {
-        int usage = vehicle.getUsageOfTheVehicle();
-
-        if (usage == 0) {
-            premium += 25;
-        } else if (usage == 2) {
-            premium += 179.24;
-        } else if (usage == 3 || usage == 6 || usage == 7 || usage == 8) {
-            premium += 400.93;
-        } else if (usage == 5) {
-            premium += 92.59;
-        } else {
-            premium += 48.59;
-        }
-        return premium;
-    }
-
-    private static double getCalculateClientYears(Client client, Vehicle vehicle, double premium) {
-        int usageOfTheVehicle = vehicle.getUsageOfTheVehicle();
-
-        if (client.getYearsOfTheClient() <= 24 || (usageOfTheVehicle == 3 || usageOfTheVehicle == 6 ||
-                usageOfTheVehicle == 7 || usageOfTheVehicle == 8)) {
-            premium += 90.98;
-        } else {
-            premium += 11.45;
-        }
-
-        return premium;
-    }
 
     private static void under24YearsUsers(int userYears, int vehicleUsage) {
         if (userYears <= 24 && vehicleUsage == 2) {
@@ -1256,11 +1681,10 @@ public class PremiumCalculations {
                 || client.getMunicipality().equalsIgnoreCase(Constants.PLOVDIV_TOWN)
                 || client.getTown().equalsIgnoreCase(Constants.VARNA_TOWN);
     }
+
     private static void under24YearsUserCalculations(int userYears, boolean specialUsage) {
         if (userYears <= 24 && !specialUsage) {
             premium += 25.5;
         }
     }
-
-
 }
