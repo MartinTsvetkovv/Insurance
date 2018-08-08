@@ -2,7 +2,6 @@ package insuranceFx;
 
 import carInsurance.PremiumCalculations;
 import carInsurance.models.*;
-import com.sun.xml.internal.ws.policy.spi.PrefixMapper;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
