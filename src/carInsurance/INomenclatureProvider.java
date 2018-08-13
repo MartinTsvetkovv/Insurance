@@ -9,6 +9,6 @@ import java.util.Set;
 public interface INomenclatureProvider {
     Map<Integer, String> getNomenclature(String name) throws FileNotFoundException, SQLException;
 
-    Map<String, Set<String>> getColumnsFromTable(String firstTable, String secondTable);
+    Map<String, Set<String>> getColumnsFromTable(String table1, String table2);
 
 }
