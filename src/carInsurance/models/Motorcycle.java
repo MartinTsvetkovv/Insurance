@@ -11,7 +11,7 @@ public class Motorcycle extends AbstractVehicle implements MotorcycleInsurance {
     }
     @Override
     public int getDurationOfTheInsurance() {
-        return durationOfTheInsurance;
+        return this.durationOfTheInsurance;
     }
 
 

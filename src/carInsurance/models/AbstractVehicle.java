@@ -24,7 +24,7 @@ public abstract class AbstractVehicle implements Vehicle {
     }
 
     public int getYear() {
-        return yearOfProduction;
+        return this.yearOfProduction;
     }
 
     public int getEngineVolume() {
@@ -32,7 +32,7 @@ public abstract class AbstractVehicle implements Vehicle {
     }
 
     public int getUsageOfTheVehicle() {
-        return vehicleUsage;
+        return this.vehicleUsage;
     }
 }
 
