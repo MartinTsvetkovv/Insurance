@@ -1,7 +1,7 @@
 package carInsurance;
 
 import carInsurance.models.Car;
-import carInsurance.models.Client;
+import carInsurance.models.ClientImpl;
 import carInsurance.models.Truck;
 
 import java.util.Scanner;
@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Controller {
 
     private Car car;
-    private Client client;
+    private ClientImpl clientImpl;
     private Truck truck;
     private PremiumCalculations premiumCalculations;
 
@@ -33,7 +33,7 @@ public class Controller {
             return;
         }
         //premiumCalculations = new PremiumCalculations();
-        //System.out.println(premiumCalculations.carPremiumCalculations(car, client));
+        //System.out.println(premiumCalculations.carPremiumCalculations(car, clientImpl));
     }
 
 
@@ -59,12 +59,12 @@ public class Controller {
             return;
         }
         //premiumCalculations = new PremiumCalculations();
-        //System.out.println(premiumCalculations.truckPremiumCalculations(truck,client));
+        //System.out.println(premiumCalculations.truckPremiumCalculations(truck,clientImpl));
 
     }
     private boolean clientYearsValidation(int years, String region) {
         try {
-            //client = new Client(years, region);
+            //clientImpl = new ClientImpl(years, region);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return true;

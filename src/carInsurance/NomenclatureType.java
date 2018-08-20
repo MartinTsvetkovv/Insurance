@@ -1,5 +1,7 @@
 package carInsurance;
 
+import carInsurance.interfaces.INomenclatureProvider;
+
 public abstract class NomenclatureType {
 
     private INomenclatureProvider provider;

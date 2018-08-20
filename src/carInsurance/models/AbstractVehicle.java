@@ -1,23 +1,25 @@
 package carInsurance.models;
 
-public abstract class Vehicle {
+import carInsurance.interfaces.Vehicle;
+
+public abstract class AbstractVehicle implements Vehicle {
     private int yearOfProduction;
     private int engineVolume;
     private int vehicleUsage;
 
-    Vehicle(int engineVolume, int year, int vehicleUsage) {
-         this.yearOfProduction = year;
-         this.engineVolume = engineVolume;
-         this.vehicleUsage = vehicleUsage;
-    }
-
-
-    Vehicle(int engineVolume, int vehicleUsage) {
+    AbstractVehicle(int engineVolume, int year, int vehicleUsage) {
+        this.yearOfProduction = year;
         this.engineVolume = engineVolume;
         this.vehicleUsage = vehicleUsage;
     }
 
-    Vehicle(int vehicleUsage){
+
+    AbstractVehicle(int engineVolume, int vehicleUsage) {
+        this.engineVolume = engineVolume;
+        this.vehicleUsage = vehicleUsage;
+    }
+
+    AbstractVehicle(int vehicleUsage) {
         this.vehicleUsage = vehicleUsage;
     }
 
@@ -32,6 +34,5 @@ public abstract class Vehicle {
     public int getUsageOfTheVehicle() {
         return vehicleUsage;
     }
-
-
 }
+

@@ -1,10 +1,12 @@
 package carInsurance;
 
-import carInsurance.models.*;
+import carInsurance.interfaces.Client;
+import carInsurance.interfaces.MotorcycleInsurance;
+import carInsurance.interfaces.TruckInsurance;
+import carInsurance.interfaces.Vehicle;
 import insuranceFx.Constants;
 
 public class PremiumCalculations {
-
 
     private static double premium;
 
@@ -13,10 +15,10 @@ public class PremiumCalculations {
         premium = 0.0;
     }
 
-    public static double truckPremiumCalculations(Truck truck, Client client) {
+    public static double truckPremiumCalculations(TruckInsurance truckInsurance, Client client) {
         premium = 0;
-        int usage = truck.getUsageOfTheVehicle();
-        int load = truck.getLoadAbility();
+        int usage = truckInsurance.getUsageOfTheVehicle();
+        int load = truckInsurance.getLoadAbility();
         int useYears = client.getYearsOfTheClient();
         String carAccidents = client.getCarAccidents();
         boolean specialUsage = (usage == 3 || usage == 6 || usage == 7 || usage == 8);
@@ -105,6 +107,7 @@ public class PremiumCalculations {
                 }
 
                 userUnder24YearsTruckCalculations(useYears, specialUsage);
+
                 break;
             case Constants.UP_TO_TWENTY_TONS:
                 if (usage == 2) {
@@ -160,12 +163,12 @@ public class PremiumCalculations {
         }
     }
 
-    public static double campingTrailers(CampingTrailers campingTrailers, Client client) {
+    public static double campingTrailers(Vehicle vehicle, Client client) {
         premium = 0;
-        int termOfTheInsurance = campingTrailers.getEngineVolume();
+        int termOfTheInsurance = vehicle.getEngineVolume();
         String carAccidents = client.getCarAccidents();
         int userYears = client.getYearsOfTheClient();
-        int vehicleUsage = campingTrailers.getUsageOfTheVehicle();
+        int vehicleUsage = vehicle.getUsageOfTheVehicle();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
 
         switch (termOfTheInsurance) {
@@ -295,9 +298,9 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double luggageTrailers(LuggageTrailer luggageTrailer, Client client) {
+    public static double luggageTrailers(Vehicle vehicle, Client client) {
         premium = 0;
-        int vehicleUsage = luggageTrailer.getUsageOfTheVehicle();
+        int vehicleUsage = vehicle.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
         String carAccidents = client.getCarAccidents();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
@@ -343,9 +346,9 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double trolleyBusesCalculations(Trolleybus trolleybus, Client client) {
+    public static double trolleyBusesCalculations(Vehicle vehicle, Client client) {
         premium = 0;
-        int vehicleUsage = trolleybus.getUsageOfTheVehicle();
+        int vehicleUsage = vehicle.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
         String carAccidents = client.getCarAccidents();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
@@ -407,9 +410,9 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double constructionMachinery(ConstructionMachinery constructionMachinery, Client client) {
+    public static double constructionMachinery(Vehicle vehicle, Client client) {
         premium = 0;
-        int vehicleUsage = constructionMachinery.getUsageOfTheVehicle();
+        int vehicleUsage = vehicle.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
         if (vehicleUsage == 2) {
@@ -432,7 +435,7 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double agriculturalMachineryCalculations(AgriculturalMachinery machinery, Client client) {
+    public static double agriculturalMachineryCalculations(Vehicle machinery, Client client) {
         premium = 0;
         int vehicleUsage = machinery.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
@@ -483,7 +486,7 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double cargoTrailer(CargoTrailer cargoTrailer, Client client) {
+    public static double cargoTrailer(Vehicle cargoTrailer, Client client) {
         premium = 0;
         int vehicleUsage = cargoTrailer.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
@@ -509,9 +512,9 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double saddleTractors(SaddleTractor saddleTractor, Client client) {
+    public static double saddleTractors(Vehicle vehicle, Client client) {
         premium = 0;
-        int vehicleUsage = saddleTractor.getUsageOfTheVehicle();
+        int vehicleUsage = vehicle.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
         String carAccidents = client.getCarAccidents();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
@@ -536,9 +539,9 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double calculationsATV(ATV atv, Client client) {
+    public static double calculationsATV(Vehicle vehicle, Client client) {
         premium = 0;
-        int vehicleUsage = atv.getUsageOfTheVehicle();
+        int vehicleUsage = vehicle.getUsageOfTheVehicle();
         int userYears = client.getYearsOfTheClient();
         String carAccidents = client.getCarAccidents();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
@@ -585,12 +588,12 @@ public class PremiumCalculations {
         return premium;
     }
 
-    public static double busCalculations(Bus bus, Client client) {
+    public static double busCalculations(Vehicle vehicle, Client client) {
         premium = 0;
-        int busSeats = bus.getEngineVolume();
+        int busSeats = vehicle.getEngineVolume();
         String carAccidents = client.getCarAccidents();
         int userYears = client.getYearsOfTheClient();
-        int vehicleUsage = bus.getUsageOfTheVehicle();
+        int vehicleUsage = vehicle.getUsageOfTheVehicle();
         boolean specialUsage = (vehicleUsage == 3 || vehicleUsage == 6 || vehicleUsage == 7 || vehicleUsage == 8);
 
         switch (busSeats) {
@@ -672,12 +675,12 @@ public class PremiumCalculations {
     }
 
 
-    public static double bikeCalculations(Motorcycle motorcycle, Client client) {
+    public static double bikeCalculations(MotorcycleInsurance motorcycleInsurance, Client client) {
         premium = 0;
-        int engineVolume = motorcycle.getEngineVolume();
+        int engineVolume = motorcycleInsurance.getEngineVolume();
         int yearsOfTheClient = client.getYearsOfTheClient();
-        int usage = motorcycle.getUsageOfTheVehicle();
-        int durationOfTheInsurance = motorcycle.getDurationOfTheInsurance();
+        int usage = motorcycleInsurance.getUsageOfTheVehicle();
+        int durationOfTheInsurance = motorcycleInsurance.getDurationOfTheInsurance();
         boolean specialUsage = (usage == 3 || usage == 6 || usage == 7 || usage == 8);
         String municipality = client.getMunicipality();
         String town = client.getTown();
@@ -1171,12 +1174,12 @@ public class PremiumCalculations {
     }
 
 
-    public static double carPremiumCalculations(Car car, Client client) {
+    public static double carPremiumCalculations(Vehicle vehicle, Client client) {
         premium = 0;
-        int engineVolume = car.getEngineVolume();
-        int usage = car.getUsageOfTheVehicle();
+        int engineVolume = vehicle.getEngineVolume();
+        int usage = vehicle.getUsageOfTheVehicle();
         String carAccidents = client.getCarAccidents();
-        int carYear = car.getYear();
+        int carYear = vehicle.getYear();
         boolean specialUsage = (usage == 3 || usage == 6 || usage == 7 || usage == 8);
 
         if (engineVolume == 0 || engineVolume == 1) {
@@ -1565,9 +1568,9 @@ public class PremiumCalculations {
         }
     }
 
-    public static double electricCarCalculations(ElectricCar car, Client client) {
+    public static double electricCarCalculations(Vehicle vehicle, Client client) {
         premium = 0;
-        int usage = car.getUsageOfTheVehicle();
+        int usage = vehicle.getUsageOfTheVehicle();
         String carAccidents = client.getCarAccidents();
         int userYears = client.getYearsOfTheClient();
         boolean specialUsage = (usage == 3 || usage == 6 || usage == 7 || usage == 8);

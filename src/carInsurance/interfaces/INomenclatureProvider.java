@@ -1,4 +1,4 @@
-package carInsurance;
+package carInsurance.interfaces;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;

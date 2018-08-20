@@ -36,9 +36,9 @@
             <Font name="Arial bold" size="14"/>
         </font>
     </Label>
-    <ComboBox fx:id="volumeComboBox" GridPane.rowIndex="1" GridPane.columnIndex="1" >
+    <ComboBox fx:id="volumeComboBox"  GridPane.rowIndex="1" GridPane.columnIndex="1" >
         <value>
-            <String fx:value="-- изберете --"/>
+            <String fx:value="-- изберете --" />
         </value>
     </ComboBox>
     <Label fx:id="insTermLable" text="Срок на застраховката:" GridPane.rowIndex="2" GridPane.columnIndex="0" textFill="black">
@@ -89,7 +89,7 @@
                     <String fx:value="-- избери община --"/>
                 </value>
             </ComboBox>
-            <ComboBox fx:id="townsComboBox" >
+            <ComboBox fx:id="townsComboBox" value="-- избери населено място --" >
                 <value>
                     <String fx:value="-- избери населено място --"/>
                 </value>

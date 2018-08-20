@@ -1,7 +1,7 @@
 package insuranceFx;
 
 import carInsurance.DataSourceType;
-import carInsurance.INomenclatureProvider;
+import carInsurance.interfaces.INomenclatureProvider;
 import carInsurance.MySqlDataBase;
 import carInsurance.NomenclatureFactory;
 
@@ -19,7 +19,7 @@ public class DataBaseInfo<K, V> {
     }
 
     @SuppressWarnings("unchecked")
-    protected Map<K, V> readDataBaseInfo(String name) throws ClassNotFoundException, FileNotFoundException, SQLException {
+    protected Map<K, V> readDataBaseInfo(String name) throws FileNotFoundException, SQLException {
         INomenclatureProvider provider = NomenclatureFactory.createNomenclature(DataSourceType.DATABASE);
         MySqlDataBase mySqlDataBase = new MySqlDataBase(provider, name);
         Map<Integer, String> dataBaseInfo = mySqlDataBase.getDataBaseInfo();
@@ -27,11 +27,10 @@ public class DataBaseInfo<K, V> {
 
     }
 
-    protected Map<String, Set<String>> readRegionData(String firstColumn, String secondColumn) throws ClassNotFoundException {
+    protected Map<String, Set<String>> readRegionData(String firstTable, String secondTable) {
         INomenclatureProvider provider = NomenclatureFactory.createNomenclature(DataSourceType.DATABASE);
-        MySqlDataBase mySqlDataBase = new MySqlDataBase(provider, firstColumn, secondColumn);
-        Map<String, Set<String>> regionMunicTowns = mySqlDataBase.getRegionMunicTowns();
-        return regionMunicTowns;
+        MySqlDataBase mySqlDataBase = new MySqlDataBase(provider, firstTable, secondTable);
+        return mySqlDataBase.getRegionMunicTowns();
     }
 
 

@@ -1,14 +1,16 @@
 package carInsurance.models;
 
 
-public class Client {
+import carInsurance.interfaces.Client;
+
+public class ClientImpl implements Client {
     private int years;
     private String region;
     private String carAccidents;
     private String municipality;
     private String town;
 
-    public Client(int yearsOfTheClient, String region, String municipality, String town, String carAccidents) {
+    public ClientImpl(int yearsOfTheClient, String region, String municipality, String town, String carAccidents) {
         this.setYearsOfTheClient(yearsOfTheClient);
         this.region = region;
         this.carAccidents = carAccidents;
@@ -22,11 +24,9 @@ public class Client {
         }
         this.years = yearsOfTheClient;
     }
-
     public int getYearsOfTheClient() {
         return years;
     }
-
     public String getRegion() {
         return this.region;
     }
@@ -38,7 +38,6 @@ public class Client {
     public String getMunicipality() {
         return this.municipality;
     }
-
     public String getTown() {
         return this.town;
     }

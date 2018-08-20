@@ -1,6 +1,6 @@
 package carInsurance.insuranceFileInfo;
 
-import carInsurance.INomenclatureProvider;
+import carInsurance.interfaces.INomenclatureProvider;
 
 import java.io.*;
 import java.util.*;

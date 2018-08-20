@@ -1,6 +1,8 @@
 package carInsurance.models;
 
-public class Truck extends Vehicle {
+import carInsurance.interfaces.TruckInsurance;
+
+public class Truck extends AbstractVehicle implements TruckInsurance {
     private int loadAbility;
 
     public Truck(int loadAbility, int usageOfTheVehicle, int carYear) {
@@ -8,7 +10,7 @@ public class Truck extends Vehicle {
         this.loadAbility = loadAbility;
 
     }
-
+     @Override
     public int getLoadAbility() {
         return loadAbility;
     }

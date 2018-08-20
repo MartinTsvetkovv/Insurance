@@ -1,13 +1,14 @@
 package carInsurance;
 
 import carInsurance.insuranceFileInfo.MapFileReader;
+import carInsurance.interfaces.INomenclatureProvider;
 
 public class NomenclatureFactory {
     private NomenclatureFactory() {
 
     }
 
-    public static INomenclatureProvider createNomenclature(DataSourceType dsType) throws ClassNotFoundException {
+    public static INomenclatureProvider createNomenclature(DataSourceType dsType) {
 
         if (dsType.equals(DataSourceType.RESOURCE_FILES)) {
             String projectPath = System.getProperty("user.dir");

@@ -1,6 +1,10 @@
 package insuranceFx;
 
 import carInsurance.PremiumCalculations;
+import carInsurance.interfaces.Client;
+import carInsurance.interfaces.MotorcycleInsurance;
+import carInsurance.interfaces.TruckInsurance;
+import carInsurance.interfaces.Vehicle;
 import carInsurance.models.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -11,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.text.Text;
 
 import javax.swing.*;
 import java.awt.*;
@@ -68,20 +71,10 @@ public class ControllerFx {
 
     private double premiumPrice;
 
-    private Car car;
     private Client client;
-    private Truck truck;
-    private Motorcycle motorcycle;
-    private ElectricCar electricCar;
-    private Bus bus;
-    private SaddleTractor saddleTractor;
-    private ATV atv;
-    private CargoTrailer cargoTrailer;
-    private LuggageTrailer luggageTrailer;
-    private CampingTrailers campingTrailers;
-    private Trolleybus trolleybus;
-    private AgriculturalMachinery agriculturalMachinery;
-    private ConstructionMachinery constructionMachinery;
+    private TruckInsurance truck;
+    private MotorcycleInsurance motorcycle;
+
 
     private Map<String, List<String>> volumeData = new HashMap<>();
 
@@ -112,8 +105,9 @@ public class ControllerFx {
         this.vehicleComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             ObservableList<String> volumeBox = FXCollections.observableArrayList(volumeData.get(newValue));
             volumeComboBox.setItems(volumeBox);
-            Platform.runLater(() -> volumeComboBox.setValue(Constants.SELECT));
             updateLabels();
+            volumeComboBox.setValue(Constants.SELECT);
+            //Platform.runLater(() -> volumeComboBox.setValue(Constants.SELECT));
         });
 
         regionData = dataBaseInfo.readRegionData("area", "municipality");
@@ -124,23 +118,43 @@ public class ControllerFx {
         regionComboBox.setItems(regions);
         regionComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
-            ObservableList<String> municipality = FXCollections.observableArrayList(regionData.get(newValue));
-            municipalityComboBox.setItems(municipality);
-            Platform.runLater(() -> municipalityComboBox.setValue(Constants.SELECT_MUNICIPALITY));
+            if (newValue != null) {
+                ObservableList<String> municipality = FXCollections.observableArrayList(regionData.get(newValue));
+                municipalityComboBox.setItems(municipality);
+                municipalityComboBox.setValue(Constants.SELECT_MUNICIPALITY);
+
+
+//                municipality.add(0, Constants.SELECT_MUNICIPALITY);
+//                municipalityComboBox.getSelectionModel().selectFirst();
+
+
+            }
         });
 
         municipalityComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             //TODO:
+
             try {
+
                 if (newValue != null) {
                     ObservableList<String> towns = FXCollections.observableArrayList(municipalityTown.get(newValue));
                     townsComboBox.setItems(towns);
-                    Platform.runLater(() -> townsComboBox.setValue(Constants.SELECT_TOWN));
+                    townsComboBox.setValue(Constants.SELECT_TOWN);
+//                    towns.add(0,Constants.SELECT_TOWN);
+//                    townsComboBox.getSelectionModel().selectFirst();
+
                 }
             } catch (NullPointerException e) {
                 municipalityComboBox.setValue(Constants.SELECT_MUNICIPALITY);
                 townsComboBox.getItems().clear();
                 townsComboBox.setValue(Constants.SELECT_TOWN);
+//                townsComboBox.getSelectionModel().clearSelection();
+//                townsComboBox.getSelectionModel().selectFirst();
+//                townsComboBox.getItems().remove(1,townsComboBox.getItems().size());
+
+
+
+
             }
         });
 
@@ -168,206 +182,201 @@ public class ControllerFx {
         this.noButton.setUserData("Не");
         this.noButton.setSelected(true);
 
-        this.calculationButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        this.calculationButton.setOnAction(event -> {
 
-
-                int vehicleSelect = vehicleComboBox.getSelectionModel().getSelectedIndex();
-                if (vehicleSelect == -1) {
-                    Toolkit.getDefaultToolkit().beep();
-                    JOptionPane.showMessageDialog(null, Constants.VEHICLE_DIALOG_MESSAGE);
-                    return;
-                }
-                int carYear;
-
-                try {
-                    String selectedItem = carYearComboBox.getSelectionModel().getSelectedItem();
-                    String[] splitSelectedYear = selectedItem.split(" ");
-                    carYear = Integer.parseInt(splitSelectedYear[0]);
-                } catch (NumberFormatException e) {
-                    Toolkit.getDefaultToolkit().beep();
-                    JOptionPane.showMessageDialog(null, Constants.YEAR_OF_PRODUCTION_MESSAGE);
-                    return;
-                }
-                int user;
-
-                try {
-                    String userYears = userYearsComboBox.getSelectionModel().getSelectedItem();
-                    String[] split1 = userYears.split(" ");
-                    user = Integer.parseInt(split1[0]);
-                } catch (NumberFormatException e) {
-                    Toolkit.getDefaultToolkit().beep();
-                    JOptionPane.showMessageDialog(null, Constants.USER_YEARS_MESSAGE);
-                    return;
-                }
-                String region = (String) regionComboBox.getSelectionModel().getSelectedItem();
-                String municipality = (String) municipalityComboBox.getSelectionModel().getSelectedItem();
-                String town = (String) townsComboBox.getSelectionModel().getSelectedItem();
-
-                int volumeIndex = volumeComboBox.getSelectionModel().getSelectedIndex();
-                int usage = vehicleUsageComboBox.getSelectionModel().getSelectedIndex();
-
-                int termIndex = insuranceTermComboBox.getSelectionModel().getSelectedIndex();
-
-                String carAccident = toggleRadioButtons.getSelectedToggle().getUserData().toString();
-
-                client = new Client(user, region, municipality, town, carAccident);
-                switch (vehicleSelect) {
-                    case Constants.CAR:
-                        if (volumeIndex == -1) {
-                            Toolkit.getDefaultToolkit().beep();
-                            JOptionPane.showMessageDialog(null, Constants.VOLUME_MESSGAE);
-                            return;
-                        } else if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-
-                        car = new Car(volumeIndex, carYear, usage);
-                        premiumPrice = PremiumCalculations.carPremiumCalculations(car, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-                        break;
-                    case Constants.ELECTRIC_CAR:
-                        if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-                        electricCar = new ElectricCar(usage);
-                        premiumPrice = PremiumCalculations.electricCarCalculations(electricCar, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-
-                        break;
-                    case Constants.CARGO_VEHICLE:
-                        if (volumeIndex == -1) {
-                            Toolkit.getDefaultToolkit().beep();
-                            JOptionPane.showMessageDialog(null, "Избери товаримост !");
-                            return;
-                        } else if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-                        truck = new Truck(volumeIndex, usage, carYear);
-                        premiumPrice = PremiumCalculations.truckPremiumCalculations(truck, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-                        break;
-
-                    case Constants.BUS:
-                        if (volumeIndex == -1) {
-                            Toolkit.getDefaultToolkit().beep();
-                            JOptionPane.showMessageDialog(null, "Избери брой места !");
-                            return;
-                        }
-                        if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-                        bus = new Bus(volumeIndex, usage);
-                        premiumPrice = PremiumCalculations.busCalculations(bus, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-                        break;
-                    case Constants.SADDLE_TRACTORS:
-                        if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-                        saddleTractor = new SaddleTractor(usage);
-                        premiumPrice = PremiumCalculations.saddleTractors(saddleTractor, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-                        break;
-
-                    case Constants.MOTORCYCLE:
-                        if (volumeIndex == -1) {
-                            Toolkit.getDefaultToolkit().beep();
-                            JOptionPane.showMessageDialog(null, Constants.VOLUME_MESSGAE);
-                            return;
-                        }
-                        if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-                        if (termIndex == -1 || insuranceTermComboBox.getSelectionModel().getSelectedItem().equals(Constants.SELECT)) {
-                            Toolkit.getDefaultToolkit().beep();
-                            JOptionPane.showMessageDialog(null, "Избери срок на застраховката !");
-                            return;
-                        }
-                        motorcycle = new Motorcycle(volumeIndex, carYear, usage, termIndex);
-                        premiumPrice = PremiumCalculations.bikeCalculations(motorcycle, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-                        break;
-                    case Constants.ATV:
-                        if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-                        atv = new ATV(usage);
-                        premiumPrice = PremiumCalculations.calculationsATV(atv, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-                        break;
-                    case Constants.CARGO_TRAILER:
-                        if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-                        cargoTrailer = new CargoTrailer(usage);
-                        premiumPrice = PremiumCalculations.cargoTrailer(cargoTrailer, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-                        break;
-                    case Constants.LUGGAGE_TRAILERS:
-                        if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-                        luggageTrailer = new LuggageTrailer(usage);
-                        premiumPrice = PremiumCalculations.luggageTrailers(luggageTrailer, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-                        break;
-
-                    case Constants.CAMPING_TRAILERS:
-                        if (volumeIndex == -1) {
-                            Toolkit.getDefaultToolkit().beep();
-                            JOptionPane.showMessageDialog(null, "Избери срок на застраховката !");
-                            return;
-                        }
-                        if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-                        campingTrailers = new CampingTrailers(volumeIndex, usage);
-                        premiumPrice = PremiumCalculations.campingTrailers(campingTrailers, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-                        break;
-                    case Constants.TROLLEYBUSES:
-                        if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-                        trolleybus = new Trolleybus(usage);
-                        premiumPrice = PremiumCalculations.trolleyBusesCalculations(trolleybus, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-                        break;
-                    case Constants.AGRICULTURAL_MACINERY:
-                        if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-                        agriculturalMachinery = new AgriculturalMachinery(usage);
-                        premiumPrice = PremiumCalculations.agriculturalMachineryCalculations(agriculturalMachinery, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-                        break;
-                    case Constants.CONSTRUCTION_MACHINERY:
-                        if (addressAndUsageVerification(region, municipality, town, usage)) {
-                            return;
-                        }
-                        constructionMachinery = new ConstructionMachinery(usage);
-                        premiumPrice = PremiumCalculations.constructionMachinery(constructionMachinery, client);
-                        premiumPrice(premiumPrice);
-                        paymentOfInstallments(premiumPrice);
-                        break;
-
-                }
+            int vehicleSelect = vehicleComboBox.getSelectionModel().getSelectedIndex();
+            if (vehicleSelect == -1) {
+                Toolkit.getDefaultToolkit().beep();
+                JOptionPane.showMessageDialog(null, Constants.VEHICLE_DIALOG_MESSAGE);
+                return;
             }
+            int carYear;
 
+            try {
+                String selectedItem = carYearComboBox.getSelectionModel().getSelectedItem();
+                String[] splitSelectedYear = selectedItem.split(" ");
+                carYear = Integer.parseInt(splitSelectedYear[0]);
+            } catch (NumberFormatException e) {
+                Toolkit.getDefaultToolkit().beep();
+                JOptionPane.showMessageDialog(null, Constants.YEAR_OF_PRODUCTION_MESSAGE);
+                return;
+            }
+            int user;
+
+            try {
+                String userYears = userYearsComboBox.getSelectionModel().getSelectedItem();
+                String[] split1 = userYears.split(" ");
+                user = Integer.parseInt(split1[0]);
+            } catch (NumberFormatException e) {
+                Toolkit.getDefaultToolkit().beep();
+                JOptionPane.showMessageDialog(null, Constants.USER_YEARS_MESSAGE);
+                return;
+            }
+            String region = (String) regionComboBox.getSelectionModel().getSelectedItem();
+            String municipality = (String) municipalityComboBox.getSelectionModel().getSelectedItem();
+            String town = (String) townsComboBox.getSelectionModel().getSelectedItem();
+
+            int volumeIndex = volumeComboBox.getSelectionModel().getSelectedIndex();
+            int usage = vehicleUsageComboBox.getSelectionModel().getSelectedIndex();
+
+            int termIndex = insuranceTermComboBox.getSelectionModel().getSelectedIndex();
+
+            String carAccident = toggleRadioButtons.getSelectedToggle().getUserData().toString();
+
+            client = new ClientImpl(user, region, municipality, town, carAccident);
+            switch (vehicleSelect) {
+                case Constants.CAR:
+                    if (volumeIndex == -1) {
+                        Toolkit.getDefaultToolkit().beep();
+                        JOptionPane.showMessageDialog(null, Constants.VOLUME_MESSGAE);
+                        return;
+                    } else if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+
+                    Vehicle car = new Car(volumeIndex, carYear, usage);
+                    premiumPrice = PremiumCalculations.carPremiumCalculations(car, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+                    break;
+                case Constants.ELECTRIC_CAR:
+                    if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+                    Vehicle electricCar = new ElectricCar(usage);
+                    premiumPrice = PremiumCalculations.electricCarCalculations(electricCar, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+
+                    break;
+                case Constants.CARGO_VEHICLE:
+                    if (volumeIndex == -1) {
+                        Toolkit.getDefaultToolkit().beep();
+                        JOptionPane.showMessageDialog(null, "Избери товаримост !");
+                        return;
+                    } else if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+                    truck = new Truck(volumeIndex, usage, carYear);
+                    premiumPrice = PremiumCalculations.truckPremiumCalculations(truck, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+                    break;
+
+                case Constants.BUS:
+                    if (volumeIndex == -1) {
+                        Toolkit.getDefaultToolkit().beep();
+                        JOptionPane.showMessageDialog(null, "Избери брой места !");
+                        return;
+                    }
+                    if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+                    Vehicle bus = new Bus(volumeIndex, usage);
+                    premiumPrice = PremiumCalculations.busCalculations(bus, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+                    break;
+                case Constants.SADDLE_TRACTORS:
+                    if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+                    Vehicle saddleTractor = new SaddleTractor(usage);
+                    premiumPrice = PremiumCalculations.saddleTractors(saddleTractor, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+                    break;
+
+                case Constants.MOTORCYCLE:
+                    if (volumeIndex == -1) {
+                        Toolkit.getDefaultToolkit().beep();
+                        JOptionPane.showMessageDialog(null, Constants.VOLUME_MESSGAE);
+                        return;
+                    }
+                    if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+                    if (termIndex == -1 || insuranceTermComboBox.getSelectionModel().getSelectedItem().equals(Constants.SELECT)) {
+                        Toolkit.getDefaultToolkit().beep();
+                        JOptionPane.showMessageDialog(null, "Избери срок на застраховката !");
+                        return;
+                    }
+                    motorcycle = new Motorcycle(volumeIndex, carYear, usage, termIndex);
+                    premiumPrice = PremiumCalculations.bikeCalculations(motorcycle, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+                    break;
+                case Constants.ATV:
+                    if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+                    Vehicle atv = new ATV(usage);
+                    premiumPrice = PremiumCalculations.calculationsATV(atv, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+                    break;
+                case Constants.CARGO_TRAILER:
+                    if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+                    Vehicle cargoTrailer = new CargoTrailer(usage);
+                    premiumPrice = PremiumCalculations.cargoTrailer(cargoTrailer, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+                    break;
+                case Constants.LUGGAGE_TRAILERS:
+                    if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+                    Vehicle luggageTrailer = new LuggageTrailer(usage);
+                    premiumPrice = PremiumCalculations.luggageTrailers(luggageTrailer, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+                    break;
+
+                case Constants.CAMPING_TRAILERS:
+                    if (volumeIndex == -1) {
+                        Toolkit.getDefaultToolkit().beep();
+                        JOptionPane.showMessageDialog(null, "Избери срок на застраховката !");
+                        return;
+                    }
+                    if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+                    Vehicle campingTrailers = new CampingTrailers(volumeIndex, usage);
+                    premiumPrice = PremiumCalculations.campingTrailers(campingTrailers, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+                    break;
+                case Constants.TROLLEYBUSES:
+                    if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+                    Vehicle trolleybus = new Trolleybus(usage);
+                    premiumPrice = PremiumCalculations.trolleyBusesCalculations(trolleybus, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+                    break;
+                case Constants.AGRICULTURAL_MACINERY:
+                    if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+                    Vehicle agriculturalMachinery = new AgriculturalMachinery(usage);
+                    premiumPrice = PremiumCalculations.agriculturalMachineryCalculations(agriculturalMachinery, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+                    break;
+                case Constants.CONSTRUCTION_MACHINERY:
+                    if (addressAndUsageVerification(region, municipality, town, usage)) {
+                        return;
+                    }
+                    Vehicle constructionMachinery = new ConstructionMachinery(usage);
+                    premiumPrice = PremiumCalculations.constructionMachinery(constructionMachinery, client);
+                    premiumPrice(premiumPrice);
+                    paymentOfInstallments(premiumPrice);
+                    break;
+
+            }
         });
     }
 
@@ -395,11 +404,11 @@ public class ControllerFx {
 
     private void setVehicle(Map<Integer, String> vehicleType, Map<Integer, String> volume1,
                             Map<Integer, String> motorcycleVolume,
-                            Map<Integer, String> truck_loadability, Map<Integer, String> busSeats, Map<Integer, String> insuranceTerm) {
+                            Map<Integer, String> truckLoadability, Map<Integer, String> busSeats, Map<Integer, String> insuranceTerm) {
 
         List<String> carVolume = new ArrayList<>(volume1.values());
         List<String> bikeVolume = new ArrayList<>(motorcycleVolume.values());
-        List<String> truckLoads = new ArrayList<>(truck_loadability.values());
+        List<String> truckLoads = new ArrayList<>(truckLoadability.values());
         List<String> busInfo = new ArrayList<>(busSeats.values());
         List<String> term = new ArrayList<>(insuranceTerm.values());
         for (Integer id : vehicleType.keySet()) {

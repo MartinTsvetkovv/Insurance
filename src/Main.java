@@ -6,19 +6,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.FileNotFoundException;
-import java.sql.SQLException;
-import java.util.*;
-
 
 public class Main extends Application {
 
-    public static void main(String[] args) throws FileNotFoundException, SQLException, ClassNotFoundException {
+    public static void main(String[] args) {
         launch(args);
 
-
     }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
 
