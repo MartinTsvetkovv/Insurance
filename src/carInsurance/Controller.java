@@ -1,8 +1,8 @@
 package carInsurance;
 
+import carInsurance.interfaces.Truck;
 import carInsurance.models.Car;
 import carInsurance.models.ClientImpl;
-import carInsurance.models.Truck;
 
 import java.util.Scanner;
 

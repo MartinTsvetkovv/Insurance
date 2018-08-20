@@ -1,8 +1,8 @@
 package carInsurance;
 
 import carInsurance.interfaces.Client;
-import carInsurance.interfaces.MotorcycleInsurance;
-import carInsurance.interfaces.TruckInsurance;
+import carInsurance.interfaces.Motorcycle;
+import carInsurance.interfaces.Truck;
 import carInsurance.interfaces.Vehicle;
 import insuranceFx.Constants;
 
@@ -15,7 +15,7 @@ public class PremiumCalculations {
         premium = 0.0;
     }
 
-    public static double truckPremiumCalculations(TruckInsurance truckInsurance, Client client) {
+    public static double truckPremiumCalculations(Truck truckInsurance, Client client) {
         premium = 0;
         int usage = truckInsurance.getUsageOfTheVehicle();
         int load = truckInsurance.getLoadAbility();
@@ -675,7 +675,7 @@ public class PremiumCalculations {
     }
 
 
-    public static double bikeCalculations(MotorcycleInsurance motorcycleInsurance, Client client) {
+    public static double bikeCalculations(Motorcycle motorcycleInsurance, Client client) {
         premium = 0;
         int engineVolume = motorcycleInsurance.getEngineVolume();
         int yearsOfTheClient = client.getYearsOfTheClient();

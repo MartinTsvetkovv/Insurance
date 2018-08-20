@@ -2,15 +2,13 @@ package insuranceFx;
 
 import carInsurance.PremiumCalculations;
 import carInsurance.interfaces.Client;
-import carInsurance.interfaces.MotorcycleInsurance;
-import carInsurance.interfaces.TruckInsurance;
+import carInsurance.interfaces.Motorcycle;
+import carInsurance.interfaces.Truck;
 import carInsurance.interfaces.Vehicle;
 import carInsurance.models.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -72,8 +70,8 @@ public class ControllerFx {
     private double premiumPrice;
 
     private Client client;
-    private TruckInsurance truck;
-    private MotorcycleInsurance motorcycle;
+    private Truck truck;
+    private Motorcycle motorcycle;
 
 
     private Map<String, List<String>> volumeData = new HashMap<>();
@@ -257,7 +255,7 @@ public class ControllerFx {
                     } else if (addressAndUsageVerification(region, municipality, town, usage)) {
                         return;
                     }
-                    truck = new Truck(volumeIndex, usage, carYear);
+                    truck = new TruckImpl(volumeIndex, usage, carYear);
                     premiumPrice = PremiumCalculations.truckPremiumCalculations(truck, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
@@ -301,7 +299,7 @@ public class ControllerFx {
                         JOptionPane.showMessageDialog(null, "Избери срок на застраховката !");
                         return;
                     }
-                    motorcycle = new Motorcycle(volumeIndex, carYear, usage, termIndex);
+                    motorcycle = new MotorcycleImpl(volumeIndex, carYear, usage, termIndex);
                     premiumPrice = PremiumCalculations.bikeCalculations(motorcycle, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);

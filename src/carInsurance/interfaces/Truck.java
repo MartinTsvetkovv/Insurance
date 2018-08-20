@@ -1,5 +1,5 @@
 package carInsurance.interfaces;
 
-public interface TruckInsurance extends Vehicle {
+public interface Truck extends Vehicle{
     int getLoadAbility();
 }
