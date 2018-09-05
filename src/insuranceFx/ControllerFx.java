@@ -222,6 +222,8 @@ public class ControllerFx {
             String carAccident = toggleRadioButtons.getSelectedToggle().getUserData().toString();
 
             client = new ClientImpl(user, region, municipality, town, carAccident);
+            PremiumCalculations calculations = new PremiumCalculations();
+
             switch (vehicleSelect) {
                 case Constants.CAR:
                     if (volumeIndex == -1) {
@@ -233,7 +235,7 @@ public class ControllerFx {
                     }
 
                     Vehicle car = new Car(volumeIndex, carYear, usage);
-                    premiumPrice = PremiumCalculations.carPremiumCalculations(car, client);
+                    premiumPrice = calculations.carPremiumCalculations(car, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
                     break;
@@ -242,7 +244,7 @@ public class ControllerFx {
                         return;
                     }
                     Vehicle electricCar = new ElectricCar(usage);
-                    premiumPrice = PremiumCalculations.electricCarCalculations(electricCar, client);
+                    premiumPrice = calculations.electricCarCalculations(electricCar, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
 
@@ -256,7 +258,7 @@ public class ControllerFx {
                         return;
                     }
                     truck = new TruckImpl(volumeIndex, usage, carYear);
-                    premiumPrice = PremiumCalculations.truckPremiumCalculations(truck, client);
+                    premiumPrice = calculations.truckPremiumCalculations(truck, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
                     break;
@@ -271,7 +273,7 @@ public class ControllerFx {
                         return;
                     }
                     Vehicle bus = new Bus(volumeIndex, usage);
-                    premiumPrice = PremiumCalculations.busCalculations(bus, client);
+                    premiumPrice = calculations.busCalculations(bus, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
                     break;
@@ -280,7 +282,7 @@ public class ControllerFx {
                         return;
                     }
                     Vehicle saddleTractor = new SaddleTractor(usage);
-                    premiumPrice = PremiumCalculations.saddleTractors(saddleTractor, client);
+                    premiumPrice = calculations.saddleTractors(saddleTractor, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
                     break;
@@ -300,7 +302,7 @@ public class ControllerFx {
                         return;
                     }
                     motorcycle = new MotorcycleImpl(volumeIndex, carYear, usage, termIndex);
-                    premiumPrice = PremiumCalculations.bikeCalculations(motorcycle, client);
+                    premiumPrice = calculations.bikeCalculations(motorcycle, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
                     break;
@@ -309,7 +311,7 @@ public class ControllerFx {
                         return;
                     }
                     Vehicle atv = new ATV(usage);
-                    premiumPrice = PremiumCalculations.calculationsATV(atv, client);
+                    premiumPrice = calculations.calculationsATV(atv, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
                     break;
@@ -318,7 +320,7 @@ public class ControllerFx {
                         return;
                     }
                     Vehicle cargoTrailer = new CargoTrailer(usage);
-                    premiumPrice = PremiumCalculations.cargoTrailer(cargoTrailer, client);
+                    premiumPrice = calculations.cargoTrailer(cargoTrailer, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
                     break;
@@ -327,7 +329,7 @@ public class ControllerFx {
                         return;
                     }
                     Vehicle luggageTrailer = new LuggageTrailer(usage);
-                    premiumPrice = PremiumCalculations.luggageTrailers(luggageTrailer, client);
+                    premiumPrice = calculations.luggageTrailers(luggageTrailer, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
                     break;
@@ -342,7 +344,7 @@ public class ControllerFx {
                         return;
                     }
                     Vehicle campingTrailers = new CampingTrailers(volumeIndex, usage);
-                    premiumPrice = PremiumCalculations.campingTrailers(campingTrailers, client);
+                    premiumPrice = calculations.campingTrailers(campingTrailers, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
                     break;
@@ -351,7 +353,7 @@ public class ControllerFx {
                         return;
                     }
                     Vehicle trolleybus = new Trolleybus(usage);
-                    premiumPrice = PremiumCalculations.trolleyBusesCalculations(trolleybus, client);
+                    premiumPrice = calculations.trolleyBusesCalculations(trolleybus, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
                     break;
@@ -360,7 +362,7 @@ public class ControllerFx {
                         return;
                     }
                     Vehicle agriculturalMachinery = new AgriculturalMachinery(usage);
-                    premiumPrice = PremiumCalculations.agriculturalMachineryCalculations(agriculturalMachinery, client);
+                    premiumPrice = calculations.agriculturalMachineryCalculations(agriculturalMachinery, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
                     break;
@@ -369,7 +371,7 @@ public class ControllerFx {
                         return;
                     }
                     Vehicle constructionMachinery = new ConstructionMachinery(usage);
-                    premiumPrice = PremiumCalculations.constructionMachinery(constructionMachinery, client);
+                    premiumPrice = calculations.constructionMachinery(constructionMachinery, client);
                     premiumPrice(premiumPrice);
                     paymentOfInstallments(premiumPrice);
                     break;
