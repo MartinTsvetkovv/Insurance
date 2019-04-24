@@ -13,7 +13,7 @@ public class DataBaseInfo<K, V> {
     private List<String> userYears;
     private List<String> carYears;
 
-    public DataBaseInfo() {
+    protected DataBaseInfo() {
         this.userYears = new ArrayList<>();
         this.carYears = new ArrayList<>();
     }
@@ -34,14 +34,14 @@ public class DataBaseInfo<K, V> {
     }
 
 
-    public List<String> addUserYears() {
+    protected   List<String> addUserYears() {
         for (int i = 18; i < 100; i++) {
             this.userYears.add(i + " години");
         }
         return this.userYears;
     }
 
-    public List<String> addCarYears() {
+    protected List<String> addCarYears() {
         for (int i = 1960; i <= 2018; i++) {
             this.carYears.add(i + " г.");
         }

@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.List;
 
 public class ControllerFx {
+
     @FXML
     private ComboBox<String> vehicleComboBox = new ComboBox<>();
     @FXML
@@ -82,7 +83,7 @@ public class ControllerFx {
 
 
     @SuppressWarnings("unchecked")
-    public void setInsuranceData() throws FileNotFoundException, SQLException, ClassNotFoundException {
+    public void setInsuranceData() throws FileNotFoundException, SQLException {
         DataBaseInfo dataBaseInfo = new DataBaseInfo();
 
         Map<Integer, String> vehicleType = dataBaseInfo.readDataBaseInfo("vehicletype");
@@ -121,10 +122,8 @@ public class ControllerFx {
                 municipalityComboBox.setItems(municipality);
                 municipalityComboBox.setValue(Constants.SELECT_MUNICIPALITY);
 
-
 //                municipality.add(0, Constants.SELECT_MUNICIPALITY);
 //                municipalityComboBox.getSelectionModel().selectFirst();
-
 
             }
         });
@@ -149,8 +148,6 @@ public class ControllerFx {
 //                townsComboBox.getSelectionModel().clearSelection();
 //                townsComboBox.getSelectionModel().selectFirst();
 //                townsComboBox.getItems().remove(1,townsComboBox.getItems().size());
-
-
 
 
             }

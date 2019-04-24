@@ -3,7 +3,8 @@ package insuranceFx;
 public final class Constants {
     private Constants() {
     }
-
+    public static final int DEFAULT_YEAR = 0;
+    public static final int DEFAULT_ENGINE_VOLUME = 0;
     public static final String DEFAULT_REGION_VALUE = "-- избери област --";
     public static final String SELECT = "-- изберете --";
     public static final String SELECT_TOWN = "-- избери населено място --";
