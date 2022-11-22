@@ -27,7 +27,7 @@ public class MySqlDataBaseReader implements INomenclatureProvider {
 //
             Class.forName(myDriver);
             String fullPath = this.connection;
-            Connection connection = DriverManager.getConnection(fullPath, "root", "Clarinet8310");
+            Connection connection = DriverManager.getConnection(fullPath, "root", "");
 
                 String query = "SELECT id, name FROM " + name;
 
@@ -56,7 +56,7 @@ public class MySqlDataBaseReader implements INomenclatureProvider {
             //String url = "jdbc:mysql://localhost:3309/insurance?autoReconnect=true&useSSL=false";
             String urlPath = this.connection;
             Class.forName(driver);
-            Connection con = DriverManager.getConnection(urlPath, "root", "Clarinet8310");
+            Connection con = DriverManager.getConnection(urlPath, "root", "");
 
             String query = "SELECT " + firstTable + ".name, " + secondTable + ".name FROM " + firstTable + ", " + secondTable + " " +
                     " WHERE " + secondTable + "." + firstTable + "_id =" + firstTable + ".id";
